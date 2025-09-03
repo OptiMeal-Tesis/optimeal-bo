@@ -106,37 +106,35 @@ export default function Login() {
             </div>
 
             {/* Form */}
-            <div className="flex flex-col gap-5">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <CustomTextField
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => handleFieldChange('email', e.target.value)}
-                  onBlur={() => handleFieldBlur('email')}
-                  size="medium"
-                  fullWidth
-                  aria-label="Email address"
-                  required
-                  error={touched.email && !!errors.email}
-                  helperText={touched.email && errors.email}
-                />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <CustomTextField
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => handleFieldChange('email', e.target.value)}
+                onBlur={() => handleFieldBlur('email')}
+                size="medium"
+                fullWidth
+                aria-label="Email address"
+                required
+                error={touched.email && !!errors.email}
+                helperText={touched.email && errors.email}
+              />
 
-                <CustomTextField
-                  label="Contraseña"
-                  type="password"
-                  value={password}
-                  onChange={(e) => handleFieldChange('password', e.target.value)}
-                  onBlur={() => handleFieldBlur('password')}
-                  size="medium"
-                  fullWidth
-                  aria-label="Password"
-                  required
-                  error={touched.password && !!errors.password}
-                  helperText={touched.password && errors.password}
-                />
-              </form>
-            </div>
+              <CustomTextField
+                label="Contraseña"
+                type="password"
+                value={password}
+                onChange={(e) => handleFieldChange('password', e.target.value)}
+                onBlur={() => handleFieldBlur('password')}
+                size="medium"
+                fullWidth
+                aria-label="Password"
+                required
+                error={touched.password && !!errors.password}
+                helperText={touched.password && errors.password}
+              />
+            </form>
 
             {/* Login Button */}
             <div className="flex justify-center">
