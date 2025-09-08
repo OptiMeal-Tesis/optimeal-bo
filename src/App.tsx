@@ -1,12 +1,29 @@
 import { Routes, Route } from 'react-router-dom'
-import './App.css'
+import { AuthProvider} from './contexts/AuthContext'
 import Login from './pages/Login'
+import './App.css'
+import { PublicRoute } from './components/PublicRoute'
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+    </Routes>
+  );
+}
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-    </Routes>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   )
 }
 

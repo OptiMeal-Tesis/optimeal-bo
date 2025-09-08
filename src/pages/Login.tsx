@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 import { CustomTextField, CustomButton } from '../components';
+import { useAuth } from '../contexts/AuthContext';
 import optimealLogo from '../assets/images/optimeal-logo.png';
 import trayImage from '../assets/images/tray.png';
 
@@ -11,6 +14,10 @@ export default function Login() {
     email: false,
     password: false,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -29,15 +36,29 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Mark all fields as touched
     setTouched({ email: true, password: true });
 
     if (validateForm()) {
-      console.log('Form submitted:', { email, password });
-      // Here you would typically make an API call
+      setIsSubmitting(true);
+
+      try {
+        await login({ email, password });
+        navigate('/orders', { replace: true })
+      } catch (error) {
+        toast.error('Credenciales inválidas. Por favor, verifica tu email y contraseña.', {
+          duration: 3000,
+          style: {
+            background: '#ef4444',
+            color: '#fff',
+          },
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -46,11 +67,6 @@ export default function Login() {
       setEmail(value);
     } else {
       setPassword(value);
-    }
-
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -117,8 +133,8 @@ export default function Login() {
                 fullWidth
                 aria-label="Email address"
                 required
-                error={touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
+                disabled={isSubmitting}
               />
 
               <CustomTextField
@@ -131,8 +147,8 @@ export default function Login() {
                 fullWidth
                 aria-label="Password"
                 required
-                error={touched.password && !!errors.password}
                 helperText={touched.password && errors.password}
+                disabled={isSubmitting}
               />
             </form>
 
@@ -143,10 +159,15 @@ export default function Login() {
                 variant="contained"
                 fullWidth={false}
                 onClick={handleSubmit}
+                disabled={isSubmitting}
+                loading={isSubmitting}
                 sx={{
                   backgroundColor: 'var(--color-primary-500)',
                   '&:hover': {
                     backgroundColor: 'var(--color-primary-600)',
+                  },
+                  '&:disabled': {
+                    backgroundColor: 'var(--color-primary-300)',
                   }
                 }}
               >
@@ -155,6 +176,23 @@ export default function Login() {
             </div>
           </div>
 
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#ef4444',
+                color: '#fff',
+              },
+              error: {
+                duration: 3000,
+                iconTheme: {
+                  primary: '#fff',
+                  secondary: '#ef4444',
+                },
+              },
+            }}
+          />
         </div>
       </div>
     </div>
