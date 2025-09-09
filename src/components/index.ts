@@ -1,5 +1,6 @@
 export { default as CustomTextField } from './CustomTextField';
 export { default as CustomButton } from './CustomButton';
+export { CustomNumberField } from './CustomNumberField';
 export { default as MealCard } from './MealCard';
 export { default as Layout } from './Layout';
 export { PublicRoute } from './PublicRoute';

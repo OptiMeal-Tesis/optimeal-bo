@@ -46,57 +46,64 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white min-h-screen flex flex-col border-r border-gray-200">
-          {/* Logo at the top */}
-          <div className="p-4">
-            <div className="flex items-center gap-3">
-              <img src={optimealLogo} alt="OptiMeal Logo" />
-            </div>
+    <div className="min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="fixed left-0 top-0 w-64 h-screen bg-white flex flex-col border-r border-gray-200 z-10">
+        {/* Logo at the top */}
+        <div className="p-4">
+          <div className="flex items-center gap-3">
+            <img src={optimealLogo} alt="OptiMeal Logo" />
+          </div>
+        </div>
+
+        {/* Navigation Items */}
+        <nav className="flex-1 p-2">
+          <ul className="space-y-2">
+            {navigationItems.map((item) => {
+              const isActive = location.pathname === item.path;
+
+              return (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sub1`}
+                    style={{
+                      color: "var(--color-primary-500)",
+                      backgroundColor: isActive
+                        ? "rgba(13, 71, 161, 0.2)"
+                        : "transparent",
+                    }}
+                  >
+                    <span className="text-lg">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Admin and Logout at bottom */}
+        <div className="flex gap-3 px-4 py-3 text-sub1 text-primary-500 items-center justify-between">
+          <span>Admin</span>
+          <LogOutIcon color="var(--color-error)" onClick={handleLogout} />
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="ml-64 min-h-screen">
+        <div className="flex flex-col h-screen">
+          {/* Header */}
+          <div className="p-9">
+            <span className="text-h1-bold text-primary-500">
+              {import.meta.env.VITE_COMPANY_NAME || "OptiMeal"}
+            </span>
           </div>
 
-          {/* Navigation Items */}
-          <nav className="flex-1 p-2">
-            <ul className="space-y-2">
-              {navigationItems.map((item) => {
-                const isActive = location.pathname === item.path;
-
-                return (
-                  <li key={item.path}>
-                    <Link
-                      to={item.path}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sub1`}
-                      style={{
-                        color: "var(--color-primary-500)",
-                        backgroundColor: isActive
-                          ? "rgba(13, 71, 161, 0.2)"
-                          : "transparent",
-                      }}
-                    >
-                      <span className="text-lg">{item.icon}</span>
-                      <span>{item.label}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-
-          {/* Admin and Logout at bottom */}
-          <div className="flex gap-3 px-4 py-3 text-sub1 text-primary-500 items-center justify-between">
-            <span>Admin</span>
-            <LogOutIcon color="var(--color-error)" onClick={handleLogout} />
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto px-9 pb-4">
+            <div className="relative">{children}</div>
           </div>
-        </aside>
-
-        {/* Main Content */}
-        <div className="flex flex-col flex-1 p-9 gap-10 bg-gray-100">
-          <span className="text-h1-bold text-primary-500">
-            {import.meta.env.VITE_COMPANY_NAME || "OptiMeal"}
-          </span>
-          <div className="flex-1">{children}</div>
         </div>
       </div>
     </div>
