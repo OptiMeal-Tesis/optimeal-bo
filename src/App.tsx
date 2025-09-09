@@ -1,8 +1,11 @@
-import { Routes, Route } from 'react-router-dom'
-import { AuthProvider} from './contexts/AuthContext'
-import Login from './pages/Login'
-import './App.css'
-import { PublicRoute } from './components/PublicRoute'
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import Login from "./pages/Login";
+import "./App.css";
+import { ProtectedRoute, PublicRoute } from "./components";
+import { Orders } from "./pages/Orders";
+import { Products } from "./pages/Products";
+import { Stats } from "./components/Stats";
 
 function AppRoutes() {
   return (
@@ -15,6 +18,30 @@ function AppRoutes() {
           </PublicRoute>
         }
       />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <Orders />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/products"
+        element={
+          <ProtectedRoute>
+            <Products />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute>
+            <Stats />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
@@ -24,7 +51,7 @@ function App() {
     <AuthProvider>
       <AppRoutes />
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;
