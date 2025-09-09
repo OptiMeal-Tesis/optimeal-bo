@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ModalProvider } from "./components/ModalProvider";
 import Login from "./pages/Login";
 import "./App.css";
 import { ProtectedRoute, PublicRoute } from "./components";
@@ -49,7 +50,9 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <ModalProvider>
+        <AppRoutes />
+      </ModalProvider>
     </AuthProvider>
   );
 }

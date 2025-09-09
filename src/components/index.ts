@@ -5,5 +5,7 @@ export { default as MealCard } from './MealCard';
 export { default as Layout } from './Layout';
 export { PublicRoute } from './PublicRoute';
 export { ProtectedRoute } from './ProtectedRoute';
+export { default as Modal } from './Modal';
+export { ModalProvider } from './ModalProvider';
 export type { CustomTextFieldProps } from './CustomTextField';
 export type { CustomButtonProps } from './CustomButton';
