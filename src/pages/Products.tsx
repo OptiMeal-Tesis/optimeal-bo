@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { ProductItemCard } from "../components/ProductItemCard";
+import { CustomButton } from "../components";
+import { PlusIcon } from "../assets/icons/PlusIcon";
+import { PencilIcon } from "../assets/icons/PencilIcon";
 
 export const Products = () => {
   const today = new Date();
@@ -74,10 +77,22 @@ export const Products = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Fixed Page Header */}
-      <div className="sticky top-0 z-10 bg-gray-100 py-4">
-        <span className="text-h2-bold text-primary-500">
-          Productos - {formattedDate}
-        </span>
+      <div className="flex flex-row justify-between items-center sticky top-0 z-10 bg-gray-100 py-4">
+        <div>
+          <span className="text-h2-bold text-primary-500">
+            Productos - {formattedDate}
+          </span>
+        </div>
+        <div className="flex flex-row">
+          <CustomButton sx={{ gap: "8px" }}>
+            <PencilIcon color="var(--color-primary-500)" />
+            <span className="text-body1 text-primary-500">Guarniciones</span>
+          </CustomButton>
+          <CustomButton sx={{ gap: "8px" }}>
+            <PlusIcon color="var(--color-primary-500)" />
+            <span className="text-body1 text-primary-500">Nuevo producto</span>
+          </CustomButton>
+        </div>
       </div>
 
       {/* Scrollable Products Grid */}
