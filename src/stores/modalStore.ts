@@ -1,10 +1,13 @@
 import { create } from 'zustand';
-import type { ModalEnum, ModalProps } from '../types/modal';
+import type { ModalProps } from '../types/modal';
+import { ModalEnum } from '../types/modal';
+
+type ModalType = typeof ModalEnum[keyof typeof ModalEnum];
 
 interface ModalState {
-  selectedModal: ModalEnum | null;
+  selectedModal: ModalType | null;
   setSelectedModal: (
-    selectedModal: ModalEnum,
+    selectedModal: ModalType,
     modalProps?: ModalProps
   ) => void;
   closeModal: () => void;

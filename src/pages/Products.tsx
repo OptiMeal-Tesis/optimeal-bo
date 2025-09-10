@@ -3,6 +3,8 @@ import { ProductItemCard } from "../components/ProductItemCard";
 import { CustomButton } from "../components";
 import { PlusIcon } from "../assets/icons/PlusIcon";
 import { PencilIcon } from "../assets/icons/PencilIcon";
+import { useModalStore } from "../stores/modalStore";
+import { ModalEnum } from "../types/modal";
 
 export const Products = () => {
   const today = new Date();
@@ -74,6 +76,8 @@ export const Products = () => {
     );
   };
 
+  const setSelectedModal = useModalStore((state) => state.setSelectedModal);
+
   return (
     <div className="flex flex-col h-full">
       {/* Fixed Page Header */}
@@ -88,7 +92,7 @@ export const Products = () => {
             <PencilIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Guarniciones</span>
           </CustomButton>
-          <CustomButton sx={{ gap: "8px" }}>
+          <CustomButton sx={{ gap: "8px" }} onClick={() => setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL)}>
             <PlusIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Nuevo producto</span>
           </CustomButton>

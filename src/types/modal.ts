@@ -1,4 +1,6 @@
-export const ModalEnum = {} as const;
+export const ModalEnum = {
+  NEW_PRODUCT_MODAL: "NEW_PRODUCT_MODAL",
+} as const;
 
 export interface ModalProps {
   isOpen: boolean;
