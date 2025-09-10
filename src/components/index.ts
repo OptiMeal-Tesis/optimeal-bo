@@ -11,6 +11,7 @@ export { ImageUpload } from './ImageUpload';
 export { CustomRadioGroup } from './CustomRadioGroup';
 export { CustomChip } from './CustomChip';
 export { default as CustomSelectField } from './CustomSelectField';
+export { ProductCardSkeleton } from './ProductCardSkeleton';
 export type { CustomTextFieldProps } from './CustomTextField';
 export type { CustomButtonProps } from './CustomButton';
 export type { CustomSelectFieldProps } from './CustomSelectField';

@@ -1,39 +1,11 @@
-const API_BASE_URL = 'http://localhost:3000/api';
-
-// Auth interfaces
-export interface LoginRequest {
-    email: string;
-    password: string;
-}
-
-export interface LoginResponse {
-    success: boolean;
-    message: string;
-    accessToken: string;
-    refreshToken: string;
-    idToken: string;
-    data: {
-        email: string;
-        expiresIn: number;
-    };
-}
-
-// Generic API interfaces
-export interface ApiError {
-    message: string;
-    status?: number;
-}
-
-export interface ApiResponse<T = any> {
-    success: boolean;
-    message?: string;
-    data?: T;
-}
+import { tokenStorage } from '../utils/tokenStorage';
+import type { LoginRequest, LoginResponse } from '../types/auth';
+import type { ProductListResponse } from '../types/products';
 
 class ApiService {
     private baseURL: string;
 
-    constructor(baseURL: string = API_BASE_URL) {
+    constructor(baseURL: string = import.meta.env.VITE_API_BASE_URL) {
         this.baseURL = baseURL;
     }
 
@@ -43,11 +15,20 @@ class ApiService {
     ): Promise<T> {
         const url = `${this.baseURL}${endpoint}`;
 
+        // Get access token for authenticated requests
+        const accessToken = tokenStorage.getAccessToken();
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json',
+            ...(options.headers as Record<string, string>),
+        };
+
+        // Add authorization header if token exists
+        if (accessToken) {
+            headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
         const config: RequestInit = {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers,
-            },
+            headers,
             ...options,
         };
 
@@ -72,6 +53,12 @@ class ApiService {
         return this.request<LoginResponse>('/auth/login', {
             method: 'POST',
             body: JSON.stringify(credentials),
+        });
+    }
+
+    async getAllProducts(): Promise<ProductListResponse> {
+        return this.request<ProductListResponse>('/products', {
+            method: 'GET',
         });
     }
 }
