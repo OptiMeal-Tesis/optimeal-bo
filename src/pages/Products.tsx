@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { ProductItemCard } from "../components/ProductItemCard";
 import { CustomButton, ProductCardSkeleton } from "../components";
@@ -6,8 +5,10 @@ import { PlusIcon } from "../assets/icons/PlusIcon";
 import { PencilIcon } from "../assets/icons/PencilIcon";
 import { useModalStore } from "../stores/modalStore";
 import { ModalEnum } from "../types/modal";
-import { apiService } from "../services";
-import type { Product } from "../services";
+import { useProducts } from "../hooks/useProducts";
+import { useQueryClient } from "@tanstack/react-query";
+import type { Product } from "../types/products";
+import ImagePlaceholder from "../assets/images/image-placeholder.jpg";
 
 export const Products = () => {
   const today = new Date();
@@ -17,54 +18,33 @@ export const Products = () => {
     year: "numeric",
   });
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: products = [], isLoading, error } = useProducts();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setIsLoading(true);
-
-        const response = await apiService.getAllProducts();
-
-        if (response.success) {
-          setProducts(response.data);
-        } else {
-          toast.error("No se pudieron obtener los productos", {
-            duration: 4000,
-            style: {
-              background: "#ef4444",
-              color: "#fff",
-            },
-          });
-        }
-      } catch (err) {
-        toast.error("No se pudieron obtener los productos", {
-          duration: 4000,
-          style: {
-            background: "#ef4444",
-            color: "#fff",
-          },
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  // Show error toast if query fails
+  if (error) {
+    toast.error("No se pudieron obtener los productos", {
+      duration: 4000,
+      style: {
+        background: "#ef4444",
+        color: "#fff",
+      },
+    });
+  }
 
   const handleStockChange = (productId: string, newStock: number) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
+    // Update the cache directly
+    queryClient.setQueryData(["products"], (oldData: Product[] | undefined) => {
+      if (!oldData) return oldData;
+      return oldData.map((product) =>
         product.id.toString() === productId
           ? { ...product, stock: newStock }
           : product
-      )
-    );
+      );
+    });
   };
 
-  const setSelectedModal = useModalStore((state) => state.setSelectedModal);
+  const { setSelectedModal } = useModalStore();
 
   return (
     <div className="flex flex-col h-full">
@@ -82,7 +62,9 @@ export const Products = () => {
           </CustomButton>
           <CustomButton
             sx={{ gap: "8px" }}
-            onClick={() => setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL)}
+            onClick={() => {
+              setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL);
+            }}
           >
             <PlusIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Nuevo producto</span>
@@ -105,7 +87,9 @@ export const Products = () => {
                 No hay productos disponibles
               </p>
               <CustomButton
-                onClick={() => setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL)}
+                onClick={() => {
+                  setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL);
+                }}
                 sx={{ backgroundColor: "var(--color-primary-500)" }}
               >
                 Agregar primer producto
@@ -118,7 +102,7 @@ export const Products = () => {
               <ProductItemCard
                 key={product.id}
                 id={product.id.toString()}
-                image={product.photo || ""}
+                image={product.photo || ImagePlaceholder}
                 name={product.name}
                 description={product.description}
                 stock={product.stock}
