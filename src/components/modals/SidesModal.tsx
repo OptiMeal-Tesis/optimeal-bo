@@ -68,6 +68,12 @@ export const SidesModal: React.FC = () => {
         <div className="flex flex-col gap-3 max-h-[36vh] overflow-auto pr-2">
           {isLoading ? (
             <Loader />
+          ) : sides.length === 0 ? (
+            <div className="flex items-center justify-center py-4">
+              <span className="text-gray-500 text-center">
+                No hay guarniciones disponibles
+              </span>
+            </div>
           ) : (
             sides.map((side) => (
               <div

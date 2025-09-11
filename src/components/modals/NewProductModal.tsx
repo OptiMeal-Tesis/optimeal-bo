@@ -7,6 +7,7 @@ import {
   useCreateProduct,
   useInvalidateProducts,
 } from "../../hooks/useProducts";
+import { useGetActiveSides } from "../../hooks/useSides";
 import toast from "react-hot-toast";
 
 import type { CreateProductRequest } from "../../types/products";
@@ -41,16 +42,6 @@ const restrictionOptions = [
   "Vegano",
 ];
 
-//TODO: Get from API
-const sideOptions = [
-  "Papas fritas",
-  "Ensalada mixta",
-  "Puré de papa",
-  "Arroz",
-  "Verduras al vapor",
-  "Papas al horno",
-];
-
 export const NewProductModal = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
@@ -61,6 +52,14 @@ export const NewProductModal = () => {
 
   const createProduct = useCreateProduct();
   const invalidateProducts = useInvalidateProducts();
+  const {
+    data: activeSidesData,
+    isLoading: isLoadingSides,
+    error: sidesError,
+  } = useGetActiveSides();
+
+  // Transform active sides data to options format
+  const sideOptions = activeSidesData?.data?.map((side) => side.name) || [];
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -217,10 +216,24 @@ export const NewProductModal = () => {
                   value={formData.sides}
                   onChange={(value) => handleInputChange("sides", value)}
                   options={sideOptions}
-                  SelectProps={{ multiple: true }}
+                  SelectProps={{
+                    multiple: true,
+                    disabled:
+                      isLoadingSides ||
+                      !!sidesError ||
+                      sideOptions.length === 0,
+                  }}
                   showChips={true}
-                  error={!!errors.sides}
-                  helperText="Si no tiene guarniciones el plato, deje este espacio en blanco"
+                  error={!!errors.sides || !!sidesError}
+                  helperText={
+                    sidesError
+                      ? "Error al cargar las guarniciones"
+                      : isLoadingSides
+                      ? "Cargando guarniciones..."
+                      : sideOptions.length === 0
+                      ? "No hay guarniciones disponibles"
+                      : "Si no tiene guarniciones el plato, deje este espacio en blanco"
+                  }
                 />
               </div>
 
