@@ -1,19 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
-import { CustomTextField, CustomButton } from '../components';
-import { useAuth } from '../contexts/AuthContext';
-import optimealLogo from '../assets/images/optimeal-logo.png';
-import trayImage from '../assets/images/tray.png';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { CustomTextField, CustomButton } from "../components";
+import { useAuth } from "../contexts/AuthContext";
+import optimealLogo from "../assets/images/optimeal-logo.png";
+import trayImage from "../assets/images/tray.png";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>({
-    email: false,
-    password: false,
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
+  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>(
+    {
+      email: false,
+      password: false,
+    }
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { login } = useAuth();
@@ -23,13 +27,13 @@ export default function Login() {
     const newErrors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
-      newErrors.email = 'El email es requerido';
+      newErrors.email = "El email es requerido";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'El email no es válido';
+      newErrors.email = "El email no es válido";
     }
 
     if (!password.trim()) {
-      newErrors.password = 'La contraseña es requerida';
+      newErrors.password = "La contraseña es requerida";
     }
 
     setErrors(newErrors);
@@ -47,55 +51,59 @@ export default function Login() {
 
       try {
         await login({ email, password });
-        navigate('/orders', { replace: true })
+        navigate("/orders", { replace: true });
       } catch (error) {
-        toast.error('Credenciales inválidas. Por favor, verifica tu email y contraseña.', {
-          duration: 3000,
-          style: {
-            background: '#ef4444',
-            color: '#fff',
-          },
-        });
+        toast.error(
+          "Credenciales inválidas. Por favor, verifica tu email y contraseña.",
+          {
+            duration: 3000,
+            style: {
+              background: "#ef4444",
+              color: "#fff",
+            },
+          }
+        );
       } finally {
         setIsSubmitting(false);
       }
     }
   };
 
-  const handleFieldChange = (field: 'email' | 'password', value: string) => {
-    if (field === 'email') {
+  const handleFieldChange = (field: "email" | "password", value: string) => {
+    if (field === "email") {
       setEmail(value);
     } else {
       setPassword(value);
     }
   };
 
-  const handleFieldBlur = (field: 'email' | 'password') => {
-    setTouched(prev => ({ ...prev, [field]: true }));
+  const handleFieldBlur = (field: "email" | "password") => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
 
     // Validate individual field on blur
-    if (field === 'email' && touched.email) {
+    if (field === "email" && touched.email) {
       if (!email.trim()) {
-        setErrors(prev => ({ ...prev, email: 'El email es requerido' }));
+        setErrors((prev) => ({ ...prev, email: "El email es requerido" }));
       } else if (!/\S+@\S+\.\S+/.test(email)) {
-        setErrors(prev => ({ ...prev, email: 'El email no es válido' }));
+        setErrors((prev) => ({ ...prev, email: "El email no es válido" }));
       }
     }
 
-    if (field === 'password' && touched.password) {
+    if (field === "password" && touched.password) {
       if (!password.trim()) {
-        setErrors(prev => ({ ...prev, password: 'La contraseña es requerida' }));
+        setErrors((prev) => ({
+          ...prev,
+          password: "La contraseña es requerida",
+        }));
       }
     }
   };
 
   return (
     <div className="bg-primary-600 flex items-center justify-center p-4 h-screen w-screen">
-
       {/* Login Card */}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden py-20 px-24">
         <div className="flex flex-col md:flex-row gap-24">
-
           {/* Left Column - Image */}
           <div className="md:w-1/2">
             <div className="relative">
@@ -127,8 +135,8 @@ export default function Login() {
                 label="Email"
                 type="email"
                 value={email}
-                onChange={(e) => handleFieldChange('email', e.target.value)}
-                onBlur={() => handleFieldBlur('email')}
+                onChange={(e) => handleFieldChange("email", e.target.value)}
+                onBlur={() => handleFieldBlur("email")}
                 size="medium"
                 fullWidth
                 aria-label="Email address"
@@ -141,8 +149,8 @@ export default function Login() {
                 label="Contraseña"
                 type="password"
                 value={password}
-                onChange={(e) => handleFieldChange('password', e.target.value)}
-                onBlur={() => handleFieldBlur('password')}
+                onChange={(e) => handleFieldChange("password", e.target.value)}
+                onBlur={() => handleFieldBlur("password")}
                 size="medium"
                 fullWidth
                 aria-label="Password"
@@ -162,37 +170,19 @@ export default function Login() {
                 disabled={isSubmitting}
                 loading={isSubmitting}
                 sx={{
-                  backgroundColor: 'var(--color-primary-500)',
-                  '&:hover': {
-                    backgroundColor: 'var(--color-primary-600)',
+                  backgroundColor: "var(--color-primary-500)",
+                  "&:hover": {
+                    backgroundColor: "var(--color-primary-600)",
                   },
-                  '&:disabled': {
-                    backgroundColor: 'var(--color-primary-300)',
-                  }
+                  "&:disabled": {
+                    backgroundColor: "var(--color-primary-300)",
+                  },
                 }}
               >
                 Iniciar sesión
               </CustomButton>
             </div>
           </div>
-
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 3000,
-              style: {
-                background: '#ef4444',
-                color: '#fff',
-              },
-              error: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#fff',
-                  secondary: '#ef4444',
-                },
-              },
-            }}
-          />
         </div>
       </div>
     </div>

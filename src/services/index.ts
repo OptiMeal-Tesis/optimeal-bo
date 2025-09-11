@@ -1,8 +1,7 @@
-// API Service
-export { apiService } from './api';
+export { default as http } from './http';
 
 // Auth Types
-export type { LoginRequest, LoginResponse } from '../types/auth';
+export type { LoginRequest, LoginResponse, AuthUser, AuthState } from '../types/auth';
 
 // Product Types
 export type { Product, ProductListResponse } from '../types/products';
@@ -10,9 +9,3 @@ export type { Product, ProductListResponse } from '../types/products';
 // Common Types
 export type { ApiError, ApiResponse } from '../types/common';
 
-// Auth Service
-export { authService } from './auth';
-export type {
-    AuthUser,
-    AuthState
-} from './auth';

@@ -15,3 +15,14 @@ export interface LoginResponse {
         expiresIn: number;
     };
 }
+
+export interface AuthUser {
+    email: string;
+}
+
+export interface AuthState {
+    user: AuthUser | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    error: string | null;
+}

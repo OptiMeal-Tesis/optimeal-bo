@@ -7,6 +7,7 @@ import { ProtectedRoute, PublicRoute } from "./components";
 import { Orders } from "./pages/Orders";
 import { Products } from "./pages/Products";
 import { Stats } from "./components/Stats";
+import { Toaster } from "react-hot-toast";
 
 function AppRoutes() {
   return (
@@ -52,6 +53,7 @@ function App() {
     <AuthProvider>
       <ModalProvider>
         <AppRoutes />
+        <Toaster position="top-right" />
       </ModalProvider>
     </AuthProvider>
   );

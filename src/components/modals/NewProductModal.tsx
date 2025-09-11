@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import CustomTextField from "../CustomTextField";
 import CustomButton from "../CustomButton";
 import { ImageUpload, CustomSelectField, CustomRadioGroup } from "../";
 import { useModalStore } from "../../stores/modalStore";
-import { apiService } from "../../services/api";
-import { useInvalidateProducts } from "../../hooks/useProducts";
-import type {
-  CreateProductRequest,
-  ValidationError,
-} from "../../types/products";
+import {
+  useCreateProduct,
+  useInvalidateProducts,
+} from "../../hooks/useProducts";
+import toast from "react-hot-toast";
+
+import type { CreateProductRequest } from "../../types/products";
 import { mapRestrictionsToEnum, ProductTypeEnum } from "../../types/products";
 
 interface FormData {
@@ -58,6 +58,8 @@ export const NewProductModal = () => {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { closeModal } = useModalStore();
+
+  const createProduct = useCreateProduct();
   const invalidateProducts = useInvalidateProducts();
 
   const handleInputChange = (field: keyof FormData, value: any) => {
@@ -110,69 +112,25 @@ export const NewProductModal = () => {
         stock: 0,
       };
 
-      const response = await apiService.createProduct(
-        productData,
-        formData.image
-      );
-
-      if (response.success) {
-        toast.success("Producto creado exitosamente", {
-          duration: 4000,
-          style: {
-            background: "#10b981",
-            color: "#fff",
-          },
-        });
-        invalidateProducts();
-        closeModal();
-      } else {
-        if (response.errors && response.errors.length > 0) {
-          response.errors.forEach((validationError: ValidationError) => {
-            toast.error(
-              `${validationError.field}: ${validationError.message}`,
-              {
-                duration: 5000,
-                style: {
-                  background: "#ef4444",
-                  color: "#fff",
-                },
-              }
-            );
-          });
-        } else {
-          toast.error(response.message || "Error al crear el producto", {
+      await createProduct
+        .mutateAsync({
+          data: productData,
+          file: formData.image,
+        })
+        .then(() => {
+          toast.success("Producto creado exitosamente", {
             duration: 4000,
-            style: {
-              background: "#ef4444",
-              color: "#fff",
-            },
+            style: { background: "#10b981", color: "#fff" },
           });
-        }
-      }
-    } catch (error: any) {
-      if (
-        error.response &&
-        error.response.errors &&
-        error.response.errors.length > 0
-      ) {
-        error.response.errors.forEach((validationError: ValidationError) => {
-          toast.error(`${validationError.field}: ${validationError.message}`, {
-            duration: 5000,
-            style: {
-              background: "#ef4444",
-              color: "#fff",
-            },
+          invalidateProducts();
+          closeModal();
+        })
+        .catch((error: any) => {
+          toast.error(error?.message || "Error al crear el producto", {
+            duration: 4000,
+            style: { background: "#ef4444", color: "#fff" },
           });
         });
-      } else {
-        toast.error(error.message || "Error al crear el producto", {
-          duration: 4000,
-          style: {
-            background: "#ef4444",
-            color: "#fff",
-          },
-        });
-      }
     } finally {
       setIsSubmitting(false);
     }
