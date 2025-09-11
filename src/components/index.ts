@@ -15,3 +15,4 @@ export { ProductCardSkeleton } from './ProductCardSkeleton';
 export type { CustomTextFieldProps } from './CustomTextField';
 export type { CustomButtonProps } from './CustomButton';
 export type { CustomSelectFieldProps } from './CustomSelectField';
+export { Loader } from './Loader';

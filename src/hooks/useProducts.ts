@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useBasicQuery, request } from './useApi';
 import type { CreateProductRequest } from '../types/products';
 
-export const useProducts = () => {
+export const useGetAllProducts = () => {
   return useBasicQuery({
     queryKey: ['products'],
     f: async () => {

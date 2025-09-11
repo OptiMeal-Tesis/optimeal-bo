@@ -3,11 +3,16 @@ import { useModalStore } from "../stores/modalStore";
 import { ModalEnum } from "../types/modal";
 import { NewProductModal } from "./modals/NewProductModal";
 import { Modal } from "./Modal";
+import { SidesModal } from "./modals/SidesModal";
 
 const modalRegistry = {
   [ModalEnum.NEW_PRODUCT_MODAL]: {
     component: NewProductModal,
     title: "Agregar Nuevo Producto",
+  },
+  [ModalEnum.SIDES_MODAL]: {
+    component: SidesModal,
+    title: "Editar Guarniciones",
   },
 };
 

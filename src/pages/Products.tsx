@@ -5,7 +5,7 @@ import { PlusIcon } from "../assets/icons/PlusIcon";
 import { PencilIcon } from "../assets/icons/PencilIcon";
 import { useModalStore } from "../stores/modalStore";
 import { ModalEnum } from "../types/modal";
-import { useProducts } from "../hooks/useProducts";
+import { useGetAllProducts } from "../hooks/useProducts";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Product } from "../types/products";
 import ImagePlaceholder from "../assets/images/image-placeholder.jpg";
@@ -18,7 +18,7 @@ export const Products = () => {
     year: "numeric",
   });
 
-  const { data: products = [], isLoading, error } = useProducts();
+  const { data: products = [], isLoading, error } = useGetAllProducts();
   const queryClient = useQueryClient();
 
   // Show error toast if query fails
@@ -56,7 +56,12 @@ export const Products = () => {
           </span>
         </div>
         <div className="flex flex-row">
-          <CustomButton sx={{ gap: "8px" }}>
+          <CustomButton
+            sx={{ gap: "8px" }}
+            onClick={() => {
+              setSelectedModal(ModalEnum.SIDES_MODAL);
+            }}
+          >
             <PencilIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Guarniciones</span>
           </CustomButton>
