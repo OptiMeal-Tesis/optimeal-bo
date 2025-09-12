@@ -46,14 +46,18 @@ const RemoveImageButton = styled(IconButton)({
 
 interface ImageUploadProps {
   image?: File;
+  existingImageUrl?: string;
   onImageChange: (file: File | undefined) => void;
+  onRemoveExistingImage?: () => void;
   accept?: string;
   className?: string;
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   image,
+  existingImageUrl,
   onImageChange,
+  onRemoveExistingImage,
   accept = "image/*",
   className = "",
 }) => {
@@ -65,17 +69,28 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleRemoveImage = () => {
-    onImageChange(undefined);
+    if (image) {
+      onImageChange(undefined);
+    } else if (existingImageUrl && onRemoveExistingImage) {
+      onRemoveExistingImage();
+    }
   };
+
+  const hasImage = image || existingImageUrl;
 
   return (
     <ImageUploadArea
-      className={`${image ? "has-image" : ""} ${className}`}
-      onClick={() => !image && document.getElementById("image-upload")?.click()}
+      className={`${hasImage ? "has-image" : ""} ${className}`}
+      onClick={() =>
+        !hasImage && document.getElementById("image-upload")?.click()
+      }
     >
-      {image ? (
+      {hasImage ? (
         <>
-          <ImagePreview src={URL.createObjectURL(image)} alt="Image preview" />
+          <ImagePreview
+            src={image ? URL.createObjectURL(image) : existingImageUrl}
+            alt="Image preview"
+          />
           <RemoveImageButton size="small" onClick={handleRemoveImage}>
             <Close />
           </RemoveImageButton>

@@ -1,25 +1,23 @@
 import React from "react";
 import { useModalStore } from "../stores/modalStore";
 import { ModalEnum } from "../types/modal";
-import { NewProductModal } from "./modals/NewProductModal";
+import { ProductModal } from "./modals/ProductModal";
 import { Modal } from "./Modal";
 import { SidesModal } from "./modals/SidesModal";
 
 const modalRegistry = {
-  [ModalEnum.NEW_PRODUCT_MODAL]: {
-    component: NewProductModal,
-    title: "Agregar Nuevo Producto",
+  [ModalEnum.PRODUCT_MODAL]: {
+    component: ProductModal,
   },
   [ModalEnum.SIDES_MODAL]: {
     component: SidesModal,
-    title: "Editar Guarniciones",
   },
 };
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { selectedModal, closeModal } = useModalStore();
+  const { selectedModal, modalProps, closeModal } = useModalStore();
 
   const renderModal = () => {
     if (!selectedModal) return null;
@@ -28,11 +26,11 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
       modalRegistry[selectedModal as keyof typeof modalRegistry];
     if (!modalConfig) return null;
 
-    const { component: ModalComponent, title } = modalConfig;
+    const { component: ModalComponent } = modalConfig;
 
     return (
-      <Modal isOpen={true} onClose={closeModal} title={title}>
-        <ModalComponent />
+      <Modal isOpen={true} onClose={closeModal} title={modalProps?.title}>
+        <ModalComponent {...modalProps} />
       </Modal>
     );
   };

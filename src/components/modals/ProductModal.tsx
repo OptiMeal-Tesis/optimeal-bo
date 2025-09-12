@@ -5,13 +5,20 @@ import { ImageUpload, CustomSelectField, CustomRadioGroup } from "../";
 import { useModalStore } from "../../stores/modalStore";
 import {
   useCreateProduct,
-  useInvalidateProducts,
+  useUpdateProduct,
+  useGetProductById,
+  useInvalidateProductsQueryKey,
+  useInvalidateProductQueryKey,
 } from "../../hooks/useProducts";
 import { useGetActiveSides } from "../../hooks/useSides";
 import toast from "react-hot-toast";
 
 import type { CreateProductRequest } from "../../types/products";
-import { mapRestrictionsToEnum, ProductTypeEnum } from "../../types/products";
+import {
+  mapRestrictionsToEnum,
+  mapRestrictionsToStrings,
+  ProductTypeEnum,
+} from "../../types/products";
 
 interface FormData {
   name: string;
@@ -22,6 +29,7 @@ interface FormData {
   allowsClarifications: "yes" | "no";
   productType: "food" | "drink";
   image?: File;
+  existingImageUrl?: string;
 }
 
 const initialFormData: FormData = {
@@ -32,6 +40,7 @@ const initialFormData: FormData = {
   sides: [],
   allowsClarifications: "yes",
   productType: "food",
+  existingImageUrl: undefined,
 };
 
 //TODO: Get from API
@@ -42,7 +51,14 @@ const restrictionOptions = [
   "Vegano",
 ];
 
-export const NewProductModal = () => {
+interface ProductModalProps {
+  productId?: string;
+  title?: string;
+}
+
+export const ProductModal = ({ productId }: ProductModalProps) => {
+  // Determine if we're in editing mode based on whether productId is provided
+  const isEditing = !!productId;
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
     {}
@@ -51,7 +67,16 @@ export const NewProductModal = () => {
   const { closeModal } = useModalStore();
 
   const createProduct = useCreateProduct();
-  const invalidateProducts = useInvalidateProducts();
+  const updateProduct = useUpdateProduct();
+  const invalidateProducts = useInvalidateProductsQueryKey();
+  const invalidateProduct = useInvalidateProductQueryKey();
+
+  // Get product data when editing
+  const {
+    data: productData,
+    isLoading: isLoadingProduct,
+    error: productError,
+  } = useGetProductById(productId || "");
   const {
     data: activeSidesData,
     isLoading: isLoadingSides,
@@ -60,6 +85,23 @@ export const NewProductModal = () => {
 
   // Transform active sides data to options format
   const sideOptions = activeSidesData?.data?.map((side) => side.name) || [];
+
+  // Load product data when editing
+  React.useEffect(() => {
+    if (isEditing && productData) {
+      setFormData({
+        name: productData.name || "",
+        description: productData.description || "",
+        price: productData.price?.toString() || "",
+        restrictions: mapRestrictionsToStrings(productData.restrictions || []),
+        sides: productData.sides || [],
+        allowsClarifications: productData.admitsClarifications ? "yes" : "no",
+        productType:
+          productData.type === ProductTypeEnum.FOOD ? "food" : "drink",
+        existingImageUrl: productData.photo,
+      });
+    }
+  }, [isEditing, productData]);
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -70,6 +112,10 @@ export const NewProductModal = () => {
 
   const handleImageChange = (file: File | undefined) => {
     handleInputChange("image", file);
+  };
+
+  const handleRemoveExistingImage = () => {
+    handleInputChange("existingImageUrl", undefined);
   };
 
   const validateForm = (): boolean => {
@@ -97,7 +143,7 @@ export const NewProductModal = () => {
     setIsSubmitting(true);
 
     try {
-      const productData: CreateProductRequest = {
+      const productRequestData: CreateProductRequest = {
         name: formData.name,
         description: formData.description,
         price: Number(formData.price.replace(/[^0-9]/g, "")),
@@ -108,32 +154,74 @@ export const NewProductModal = () => {
           formData.productType === "food"
             ? ProductTypeEnum.FOOD
             : ProductTypeEnum.BEVERAGE,
-        stock: 0,
+        stock: isEditing && productData ? productData.stock : 0,
       };
 
-      await createProduct
-        .mutateAsync({
-          data: productData,
-          file: formData.image,
-        })
-        .then(() => {
-          toast.success("Producto creado exitosamente", {
-            duration: 4000,
-            style: { background: "#10b981", color: "#fff" },
+      if (isEditing && productId) {
+        await updateProduct
+          .mutateAsync({
+            id: productId,
+            data: productRequestData,
+            file: formData.image,
+          })
+          .then(() => {
+            toast.success("Producto actualizado exitosamente", {
+              duration: 4000,
+              style: { background: "#10b981", color: "#fff" },
+            });
+            invalidateProducts();
+            invalidateProduct(productId);
+            closeModal();
+          })
+          .catch((error: any) => {
+            toast.error(error?.message || "Error al actualizar el producto", {
+              duration: 4000,
+              style: { background: "#ef4444", color: "#fff" },
+            });
           });
-          invalidateProducts();
-          closeModal();
-        })
-        .catch((error: any) => {
-          toast.error(error?.message || "Error al crear el producto", {
-            duration: 4000,
-            style: { background: "#ef4444", color: "#fff" },
+      } else {
+        await createProduct
+          .mutateAsync({
+            data: productRequestData,
+            file: formData.image,
+          })
+          .then(() => {
+            toast.success("Producto creado exitosamente", {
+              duration: 4000,
+              style: { background: "#10b981", color: "#fff" },
+            });
+            invalidateProducts();
+            closeModal();
+          })
+          .catch((error: any) => {
+            toast.error(error?.message || "Error al crear el producto", {
+              duration: 4000,
+              style: { background: "#ef4444", color: "#fff" },
+            });
           });
-        });
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading state when editing and product is being fetched
+  if (isEditing && isLoadingProduct) {
+    return (
+      <div className="w-full flex justify-center items-center py-8">
+        <div className="text-gray-500">Cargando producto...</div>
+      </div>
+    );
+  }
+
+  // Show error state when editing and product failed to load
+  if (isEditing && productError) {
+    return (
+      <div className="w-full flex justify-center items-center py-8">
+        <div className="text-red-500">Error al cargar el producto</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -143,7 +231,9 @@ export const NewProductModal = () => {
           <div className="flex-shrink-0 w-[40%]">
             <ImageUpload
               image={formData.image}
+              existingImageUrl={formData.existingImageUrl}
               onImageChange={handleImageChange}
+              onRemoveExistingImage={handleRemoveExistingImage}
             />
           </div>
 
@@ -288,8 +378,8 @@ export const NewProductModal = () => {
           <CustomButton
             variant="contained"
             onClick={handleSubmit}
-            disabled={isSubmitting}
-            loading={isSubmitting}
+            disabled={isSubmitting || (isEditing && isLoadingProduct)}
+            loading={isSubmitting || (isEditing && isLoadingProduct)}
             sx={{
               backgroundColor: "var(--color-primary-500)",
               "&:hover": {
@@ -297,7 +387,7 @@ export const NewProductModal = () => {
               },
             }}
           >
-            Guardar
+            {isEditing ? "Actualizar" : "Guardar"}
           </CustomButton>
         </div>
       </div>

@@ -13,7 +13,11 @@ import type { Side } from "../../types/sides";
 import { Loader } from "..";
 import { TrashIcon } from "../../assets/icons/TrashIcon";
 
-export const SidesModal: React.FC = () => {
+interface SidesModalProps {
+  title?: string;
+}
+
+export const SidesModal: React.FC<SidesModalProps> = () => {
   const { data, isLoading } = useGetAllSides();
   const createSide = useCreateSide();
   const deleteSide = useDeleteSide();

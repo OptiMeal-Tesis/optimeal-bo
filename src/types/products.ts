@@ -80,3 +80,17 @@ export const mapRestrictionsToEnum = (restrictions: string[]): RestrictionEnum[]
         .map(restriction => RESTRICTION_MAPPING[restriction])
         .filter(Boolean) as RestrictionEnum[];
 };
+
+// Helper function to map backend enums to frontend strings
+export const mapRestrictionsToStrings = (restrictions: string[]): string[] => {
+    const reverseMapping: Record<string, string> = {
+        [RestrictionEnum.GLUTEN_FREE]: 'Sin gluten',
+        [RestrictionEnum.LACTOSE_FREE]: 'Sin lactosa',
+        [RestrictionEnum.SUGAR_FREE]: 'Sin azúcar',
+        [RestrictionEnum.VEGAN]: 'Vegano',
+    };
+    
+    return restrictions
+        .map(restriction => reverseMapping[restriction])
+        .filter(Boolean) as string[];
+};

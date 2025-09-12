@@ -1,6 +1,8 @@
 import { CustomButton } from ".";
 import { PencilIcon } from "../assets/icons/PencilIcon";
 import { CustomNumberField } from "./CustomNumberField";
+import { useModalStore } from "../stores/modalStore";
+import { ModalEnum } from "../types/modal";
 
 interface ProductItemCardProps {
   id: string;
@@ -19,6 +21,15 @@ export const ProductItemCard = ({
   stock,
   onStockChange,
 }: ProductItemCardProps) => {
+  const { setSelectedModal } = useModalStore();
+
+  const handleEditClick = () => {
+    setSelectedModal(ModalEnum.PRODUCT_MODAL, {
+      productId: id,
+      title: "Editar Producto",
+    });
+  };
+
   return (
     <div className="bg-white rounded-lg border border-gray-100 overflow-hidden w-full max-w-sm">
       {/* Image Section */}
@@ -50,6 +61,7 @@ export const ProductItemCard = ({
 
           {/* Edit Button */}
           <CustomButton
+            onClick={handleEditClick}
             sx={{
               backgroundColor: "var(--color-primary-500)",
               padding: "0",

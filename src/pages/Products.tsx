@@ -59,7 +59,9 @@ export const Products = () => {
           <CustomButton
             sx={{ gap: "8px" }}
             onClick={() => {
-              setSelectedModal(ModalEnum.SIDES_MODAL);
+              setSelectedModal(ModalEnum.SIDES_MODAL, {
+                title: "Editar Guarniciones",
+              });
             }}
           >
             <PencilIcon color="var(--color-primary-500)" />
@@ -68,7 +70,9 @@ export const Products = () => {
           <CustomButton
             sx={{ gap: "8px" }}
             onClick={() => {
-              setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL);
+              setSelectedModal(ModalEnum.PRODUCT_MODAL, {
+                title: "Agregar Nuevo Producto",
+              });
             }}
           >
             <PlusIcon color="var(--color-primary-500)" />
@@ -93,7 +97,9 @@ export const Products = () => {
               </p>
               <CustomButton
                 onClick={() => {
-                  setSelectedModal(ModalEnum.NEW_PRODUCT_MODAL);
+                  setSelectedModal(ModalEnum.PRODUCT_MODAL, {
+                    title: "Agregar Nuevo Producto",
+                  });
                 }}
                 sx={{ backgroundColor: "var(--color-primary-500)" }}
               >
