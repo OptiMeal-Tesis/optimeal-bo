@@ -1,6 +1,7 @@
 export const ModalEnum = {
   PRODUCT_MODAL: "PRODUCT_MODAL",
   SIDES_MODAL: "SIDES_MODAL",
+  DELETE_CONFIRMATION_MODAL: "DELETE_CONFIRMATION_MODAL",
 } as const;
 
 export interface ModalProps {
@@ -8,5 +9,5 @@ export interface ModalProps {
   onClose?: () => void;
   children?: React.ReactNode;
   title?: string;
-  productId?: string;
+  [key: string]: any;
 }

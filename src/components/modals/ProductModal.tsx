@@ -11,6 +11,7 @@ import {
   useInvalidateProductQueryKey,
 } from "../../hooks/useProducts";
 import { useGetActiveSides } from "../../hooks/useSides";
+import { ModalEnum } from "../../types/modal";
 import toast from "react-hot-toast";
 
 import type { CreateProductRequest } from "../../types/products";
@@ -64,7 +65,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
     {}
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { closeModal } = useModalStore();
+  const { closeModal, setSelectedModal } = useModalStore();
 
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
@@ -116,6 +117,17 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
 
   const handleRemoveExistingImage = () => {
     handleInputChange("existingImageUrl", undefined);
+  };
+
+  const handleDeleteClick = () => {
+    if (productId && productData) {
+      setSelectedModal(ModalEnum.DELETE_CONFIRMATION_MODAL, {
+        productId,
+        productName: productData.name,
+        photo: productData.photo,
+        title: "¿Eliminar Producto?",
+      });
+    }
   };
 
   const validateForm = (): boolean => {
@@ -359,36 +371,60 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4">
-          <CustomButton
-            variant="outlined"
-            onClick={closeModal}
-            disabled={isSubmitting}
-            sx={{
-              borderColor: "var(--color-gray-300)",
-              color: "var(--color-gray-600)",
-              "&:hover": {
-                borderColor: "var(--color-gray-400)",
-                backgroundColor: "var(--color-gray-50)",
-              },
-            }}
-          >
-            Cancelar
-          </CustomButton>
-          <CustomButton
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={isSubmitting || (isEditing && isLoadingProduct)}
-            loading={isSubmitting || (isEditing && isLoadingProduct)}
-            sx={{
-              backgroundColor: "var(--color-primary-500)",
-              "&:hover": {
-                backgroundColor: "var(--color-primary-600)",
-              },
-            }}
-          >
-            {isEditing ? "Actualizar" : "Guardar"}
-          </CustomButton>
+        <div
+          className={`flex items-center ${
+            isEditing ? "justify-between" : "justify-center"
+          }`}
+        >
+          {/* Delete Button - Only show when editing */}
+          {isEditing && (
+            <CustomButton
+              variant="contained"
+              onClick={handleDeleteClick}
+              disabled={isSubmitting || isLoadingProduct}
+              sx={{
+                backgroundColor: "#ef4444",
+                "&:hover": {
+                  backgroundColor: "#dc2626",
+                },
+              }}
+            >
+              Eliminar Producto
+            </CustomButton>
+          )}
+
+          {/* Cancel and Save Buttons - Always on the right */}
+          <div className="flex gap-4">
+            <CustomButton
+              variant="outlined"
+              onClick={closeModal}
+              disabled={isSubmitting}
+              sx={{
+                borderColor: "var(--color-gray-300)",
+                color: "var(--color-gray-600)",
+                "&:hover": {
+                  borderColor: "var(--color-gray-400)",
+                  backgroundColor: "var(--color-gray-50)",
+                },
+              }}
+            >
+              Cancelar
+            </CustomButton>
+            <CustomButton
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={isSubmitting || (isEditing && isLoadingProduct)}
+              loading={isSubmitting || (isEditing && isLoadingProduct)}
+              sx={{
+                backgroundColor: "var(--color-primary-500)",
+                "&:hover": {
+                  backgroundColor: "var(--color-primary-600)",
+                },
+              }}
+            >
+              {isEditing ? "Actualizar" : "Guardar"}
+            </CustomButton>
+          </div>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { ModalEnum } from "../types/modal";
 import { ProductModal } from "./modals/ProductModal";
 import { Modal } from "./Modal";
 import { SidesModal } from "./modals/SidesModal";
+import { DeleteProductModal } from "./modals/DeleteProductModal";
 
 const modalRegistry = {
   [ModalEnum.PRODUCT_MODAL]: {
@@ -11,6 +12,9 @@ const modalRegistry = {
   },
   [ModalEnum.SIDES_MODAL]: {
     component: SidesModal,
+  },
+  [ModalEnum.DELETE_CONFIRMATION_MODAL]: {
+    component: DeleteProductModal,
   },
 };
 

@@ -98,3 +98,15 @@ export const useUpdateProduct = () => {
     },
   });
 };
+
+export const useDeleteProduct = () => {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const response = await request('DELETE', `/products/${id}`);
+      if (response.success) {
+        return response.data;
+      }
+      throw new Error(response.message || 'Failed to delete product');
+    },
+  });
+};
