@@ -26,7 +26,7 @@ interface FormData {
   description: string;
   price: string;
   restrictions: string[];
-  sides: string[];
+  sides: number[];
   admitsClarifications: "yes" | "no";
   productType: "food" | "drink";
   image?: File;
@@ -84,18 +84,27 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
     error: sidesError,
   } = useGetActiveSides();
 
-  // Transform active sides data to options format
-  const sideOptions = activeSidesData?.data?.map((side) => side.name) || [];
+  // Transform active sides data to options format for display
+  const sideOptions =
+    activeSidesData?.data?.map((side) => ({
+      value: side.id,
+      label: side.name,
+    })) || [];
 
   // Load product data when editing
   React.useEffect(() => {
     if (isEditing && productData) {
+      const sideIds =
+        productData.sides?.map(
+          (side: { id: number; name: string; isActive: boolean }) => side.id
+        ) || [];
+
       setFormData({
         name: productData.name || "",
         description: productData.description || "",
         price: productData.price ? productData.price.toString() : "",
         restrictions: mapRestrictionsToStrings(productData.restrictions || []),
-        sides: productData.sides || [],
+        sides: sideIds,
         admitsClarifications: productData.admitsClarifications ? "yes" : "no",
         productType:
           productData.type === ProductTypeEnum.FOOD ? "food" : "drink",

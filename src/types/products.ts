@@ -6,7 +6,11 @@ export interface Product {
     photo?: string;
     price: number;
     restrictions: string[];
-    sides: string[];
+    sides: Array<{
+        id: number;
+        name: string;
+        isActive: boolean;
+    }>;
     admitsClarifications: boolean;
     type: string;
     createdAt: string;
@@ -43,7 +47,7 @@ export interface CreateProductRequest {
     description: string;
     price: number;
     restrictions: RestrictionEnum[];
-    sides: string[];
+    sides: number[];
     admitsClarifications: boolean;
     type: ProductTypeEnum;
     photo?: string;
