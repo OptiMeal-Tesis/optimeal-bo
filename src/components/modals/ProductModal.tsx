@@ -27,7 +27,7 @@ interface FormData {
   price: string;
   restrictions: string[];
   sides: string[];
-  allowsClarifications: "yes" | "no";
+  admitsClarifications: "yes" | "no";
   productType: "food" | "drink";
   image?: File;
   existingImageUrl?: string;
@@ -39,7 +39,7 @@ const initialFormData: FormData = {
   price: "",
   restrictions: [],
   sides: [],
-  allowsClarifications: "yes",
+  admitsClarifications: "yes",
   productType: "food",
   existingImageUrl: undefined,
 };
@@ -93,10 +93,10 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
       setFormData({
         name: productData.name || "",
         description: productData.description || "",
-        price: productData.price?.toString() || "",
+        price: productData.price ? productData.price.toString() : "",
         restrictions: mapRestrictionsToStrings(productData.restrictions || []),
         sides: productData.sides || [],
-        allowsClarifications: productData.admitsClarifications ? "yes" : "no",
+        admitsClarifications: productData.admitsClarifications ? "yes" : "no",
         productType:
           productData.type === ProductTypeEnum.FOOD ? "food" : "drink",
         existingImageUrl: productData.photo,
@@ -161,7 +161,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
         price: Number(formData.price.replace(/[^0-9]/g, "")),
         restrictions: mapRestrictionsToEnum(formData.restrictions),
         sides: formData.sides,
-        allowsClarifications: formData.allowsClarifications === "yes",
+        admitsClarifications: formData.admitsClarifications === "yes",
         type:
           formData.productType === "food"
             ? ProductTypeEnum.FOOD
@@ -179,7 +179,10 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           .then(() => {
             toast.success("Producto actualizado exitosamente", {
               duration: 4000,
-              style: { background: "#10b981", color: "#fff" },
+              style: {
+                background: "var(--color-white)",
+                color: "var(--color-success)",
+              },
             });
             invalidateProducts();
             invalidateProduct(productId);
@@ -188,7 +191,10 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           .catch((error: any) => {
             toast.error(error?.message || "Error al actualizar el producto", {
               duration: 4000,
-              style: { background: "#ef4444", color: "#fff" },
+              style: {
+                background: "var(--color-white)",
+                color: "var(--color-error)",
+              },
             });
           });
       } else {
@@ -200,7 +206,10 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           .then(() => {
             toast.success("Producto creado exitosamente", {
               duration: 4000,
-              style: { background: "#10b981", color: "#fff" },
+              style: {
+                background: "var(--color-white)",
+                color: "var(--color-success)",
+              },
             });
             invalidateProducts();
             closeModal();
@@ -208,7 +217,10 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           .catch((error: any) => {
             toast.error(error?.message || "Error al crear el producto", {
               duration: 4000,
-              style: { background: "#ef4444", color: "#fff" },
+              style: {
+                background: "var(--color-white)",
+                color: "var(--color-error)",
+              },
             });
           });
       }
@@ -343,9 +355,9 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
               <div>
                 <CustomRadioGroup
                   label="¿Admite aclaraciones?"
-                  value={formData.allowsClarifications}
+                  value={formData.admitsClarifications}
                   onChange={(value) =>
-                    handleInputChange("allowsClarifications", value)
+                    handleInputChange("admitsClarifications", value)
                   }
                   options={[
                     { value: "yes", label: "Si" },

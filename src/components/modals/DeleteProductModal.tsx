@@ -5,6 +5,7 @@ import {
   useInvalidateProductsQueryKey,
 } from "../../hooks/useProducts";
 import toast from "react-hot-toast";
+import ImagePlaceholder from "../../assets/images/image-placeholder.jpg";
 
 interface DeleteProductModalProps {
   productId?: string;
@@ -28,14 +29,20 @@ export const DeleteProductModal = ({
       await deleteProduct.mutateAsync(productId);
       toast.success("Producto eliminado exitosamente", {
         duration: 4000,
-        style: { background: "#10b981", color: "#fff" },
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-success)",
+        },
       });
       invalidateProducts();
       closeModal();
     } catch (error: any) {
       toast.error(error?.message || "Error al eliminar el producto", {
         duration: 4000,
-        style: { background: "#ef4444", color: "#fff" },
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-error)",
+        },
       });
     }
   };
@@ -45,17 +52,11 @@ export const DeleteProductModal = ({
       {/* Product Image */}
       <div className="flex flex-col gap-6 text-center">
         <div className="flex flex-col gap-1">
-          {photo ? (
-            <img
-              src={photo}
-              alt={productName}
-              className="w-100 h-56 object-cover rounded-lg mx-auto"
-            />
-          ) : (
-            <div className="w-56 h-56 bg-gray-200 rounded-lg mx-auto flex items-center justify-center">
-              <span className="text-gray-500">Sin imagen</span>
-            </div>
-          )}
+          <img
+            src={photo || ImagePlaceholder}
+            alt={productName}
+            className="w-100 h-56 object-cover rounded-lg mx-auto"
+          />
 
           {/* Product Name */}
           <h3 className="text-sub1">{productName}</h3>

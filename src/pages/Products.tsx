@@ -30,8 +30,8 @@ export const Products = () => {
     toast.error("No se pudieron obtener los productos", {
       duration: 4000,
       style: {
-        background: "#ef4444",
-        color: "#fff",
+        background: "var(--color-white)",
+        color: "var(--color-error)",
       },
     });
   }
@@ -74,13 +74,24 @@ export const Products = () => {
 
           toast.success(
             "Stock actualizado correctamente para el producto " +
-              currentProduct.name
+              currentProduct.name, 
+            {
+              style: {
+                background: "var(--color-white)",
+                color: "var(--color-success)",
+              },
+            }
           );
         } catch (error) {
           queryClient.invalidateQueries({ queryKey: ["products"] });
           toast.error(
-            "Error al actualizar el stock del producto " + currentProduct.name
-          );
+            "Error al actualizar el stock del producto " + currentProduct.name,
+            {
+              style: {
+              background: "var(--color-white)",
+              color: "var(--color-error)",
+            },
+          });
         } finally {
           debounceTimeouts.current.delete(productId);
         }

@@ -54,7 +54,7 @@ export const useCreateProduct = () => {
       formData.append('price', data.price.toString());
       formData.append('restrictions', JSON.stringify(data.restrictions));
       formData.append('sides', JSON.stringify(data.sides));
-      formData.append('allowsClarifications', data.allowsClarifications.toString());
+      formData.append('admitsClarifications', data.admitsClarifications.toString());
       formData.append('type', data.type);
       if (file) {
         formData.append('photo', file);
@@ -76,7 +76,7 @@ export const useUpdateProduct = () => {
         formData.append('price', data.price.toString());
         formData.append('restrictions', JSON.stringify(data.restrictions));
         formData.append('sides', JSON.stringify(data.sides));
-        formData.append('allowsClarifications', data.allowsClarifications.toString());
+        formData.append('admitsClarifications', data.admitsClarifications.toString());
         formData.append('type', data.type);
         formData.append('stock', data.stock.toString());
         formData.append('photo', file);
@@ -89,7 +89,7 @@ export const useUpdateProduct = () => {
           price: data.price,
           restrictions: data.restrictions,
           sides: data.sides,
-          allowsClarifications: data.allowsClarifications,
+            admitsClarifications: data.admitsClarifications,
           type: data.type,
           stock: data.stock,
         };

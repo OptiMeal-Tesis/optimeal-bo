@@ -1,7 +1,8 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ModalProvider } from "./components/ModalProvider";
 import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 import "./App.css";
 import { ProtectedRoute, PublicRoute } from "./components";
 import { Orders } from "./pages/Orders";
@@ -12,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route
         path="/login"
         element={
@@ -44,6 +46,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

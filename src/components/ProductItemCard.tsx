@@ -69,6 +69,9 @@ export const ProductItemCard = ({
               width: "40px",
               height: "40px",
               borderRadius: "50%",
+              "&:hover": {
+                backgroundColor: "var(--color-primary-600)",
+              },
             }}
           >
             <PencilIcon color="var(--color-white)" />
