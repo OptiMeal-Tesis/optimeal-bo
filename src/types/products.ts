@@ -44,7 +44,7 @@ export interface CreateProductRequest {
     price: number;
     restrictions: RestrictionEnum[];
     sides: string[];
-    allowsClarifications: boolean;
+    admitsClarifications: boolean;
     type: ProductTypeEnum;
     photo?: string;
     stock: number;

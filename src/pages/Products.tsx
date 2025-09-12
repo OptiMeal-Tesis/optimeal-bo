@@ -5,10 +5,12 @@ import { PlusIcon } from "../assets/icons/PlusIcon";
 import { PencilIcon } from "../assets/icons/PencilIcon";
 import { useModalStore } from "../stores/modalStore";
 import { ModalEnum } from "../types/modal";
-import { useGetAllProducts } from "../hooks/useProducts";
+import { useGetAllProducts, useUpdateProduct } from "../hooks/useProducts";
 import { useQueryClient } from "@tanstack/react-query";
 import type { Product } from "../types/products";
+import { mapRestrictionsToEnum, ProductTypeEnum } from "../types/products";
 import ImagePlaceholder from "../assets/images/image-placeholder.jpg";
+import { useRef, useCallback } from "react";
 
 export const Products = () => {
   const today = new Date();
@@ -20,6 +22,8 @@ export const Products = () => {
 
   const { data: products = [], isLoading, error } = useGetAllProducts();
   const queryClient = useQueryClient();
+  const updateProductMutation = useUpdateProduct();
+  const debounceTimeouts = useRef<Map<string, number>>(new Map());
 
   // Show error toast if query fails
   if (error) {
@@ -32,17 +36,60 @@ export const Products = () => {
     });
   }
 
-  const handleStockChange = (productId: string, newStock: number) => {
-    // Update the cache directly
-    queryClient.setQueryData(["products"], (oldData: Product[] | undefined) => {
-      if (!oldData) return oldData;
-      return oldData.map((product) =>
-        product.id.toString() === productId
-          ? { ...product, stock: newStock }
-          : product
+  const handleStockChange = useCallback(
+    (newStock: number, currentProduct: Product) => {
+      const productId = currentProduct.id.toString();
+
+      // Clear existing timeout for this product
+      const existingTimeout = debounceTimeouts.current.get(productId);
+      if (existingTimeout) {
+        clearTimeout(existingTimeout);
+      }
+
+      // Update cache immediately for responsive UI
+      queryClient.setQueryData(
+        ["products"],
+        (oldData: Product[] | undefined) => {
+          if (!oldData) return oldData;
+          return oldData.map((product) =>
+            product.id.toString() === productId
+              ? { ...product, stock: newStock }
+              : product
+          );
+        }
       );
-    });
-  };
+
+      // Set new timeout for API call. Avoids multiple requests.
+      const timeout = setTimeout(async () => {
+        try {
+          await updateProductMutation.mutateAsync({
+            id: currentProduct.id.toString(),
+            data: {
+              ...currentProduct,
+              restrictions: mapRestrictionsToEnum(currentProduct.restrictions),
+              type: currentProduct.type as ProductTypeEnum,
+              stock: newStock,
+            },
+          });
+
+          toast.success(
+            "Stock actualizado correctamente para el producto " +
+              currentProduct.name
+          );
+        } catch (error) {
+          queryClient.invalidateQueries({ queryKey: ["products"] });
+          toast.error(
+            "Error al actualizar el stock del producto " + currentProduct.name
+          );
+        } finally {
+          debounceTimeouts.current.delete(productId);
+        }
+      }, 1000);
+
+      debounceTimeouts.current.set(productId, timeout);
+    },
+    [queryClient, updateProductMutation]
+  );
 
   const { setSelectedModal } = useModalStore();
 
@@ -117,7 +164,9 @@ export const Products = () => {
                 name={product.name}
                 description={product.description}
                 stock={product.stock}
-                onStockChange={handleStockChange}
+                onStockChange={(newStock) =>
+                  handleStockChange(newStock, product)
+                }
               />
             ))}
           </div>

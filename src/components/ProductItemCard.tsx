@@ -10,7 +10,7 @@ interface ProductItemCardProps {
   name: string;
   description: string;
   stock: number;
-  onStockChange?: (id: string, newStock: number) => void;
+  onStockChange?: (newStock: number) => void | Promise<void>;
 }
 
 export const ProductItemCard = ({
@@ -55,7 +55,7 @@ export const ProductItemCard = ({
               value={stock}
               label="Stock"
               min={0}
-              onChange={(newStock) => onStockChange?.(id, newStock)}
+              onChange={(newStock) => onStockChange?.(newStock)}
             />
           </div>
 
