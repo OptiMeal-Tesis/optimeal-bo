@@ -16,3 +16,8 @@ export type { CustomTextFieldProps } from './CustomTextField';
 export type { CustomButtonProps } from './CustomButton';
 export type { CustomSelectFieldProps } from './CustomSelectField';
 export { Loader } from './Loader';
+export { OrdersTable } from './OrdersTable';
+export { OrderFilters } from './OrderFilters';
+export { OrderStatusSelect } from './OrderStatusSelect';
+export { TimePicker } from './TimePicker';
+export { Pagination } from './Pagination';

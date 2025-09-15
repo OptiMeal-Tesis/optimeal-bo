@@ -169,7 +169,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
         description: formData.description,
         price: Number(formData.price.replace(/[^0-9]/g, "")),
         restrictions: mapRestrictionsToEnum(formData.restrictions),
-        sides: formData.sides,
+        sides: formData.sides as number[],
         admitsClarifications: formData.admitsClarifications === "yes",
         type:
           formData.productType === "food"

@@ -67,6 +67,7 @@ export const Products = () => {
             data: {
               ...currentProduct,
               restrictions: mapRestrictionsToEnum(currentProduct.restrictions),
+              sides: currentProduct.sides.map((side) => side.id),
               type: currentProduct.type as ProductTypeEnum,
               stock: newStock,
             },
@@ -74,7 +75,7 @@ export const Products = () => {
 
           toast.success(
             "Stock actualizado correctamente para el producto " +
-              currentProduct.name, 
+              currentProduct.name,
             {
               style: {
                 background: "var(--color-white)",
@@ -88,10 +89,11 @@ export const Products = () => {
             "Error al actualizar el stock del producto " + currentProduct.name,
             {
               style: {
-              background: "var(--color-white)",
-              color: "var(--color-error)",
-            },
-          });
+                background: "var(--color-white)",
+                color: "var(--color-error)",
+              },
+            }
+          );
         } finally {
           debounceTimeouts.current.delete(productId);
         }
