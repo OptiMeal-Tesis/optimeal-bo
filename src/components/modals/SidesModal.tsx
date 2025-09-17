@@ -1,17 +1,19 @@
 import React, { useMemo, useState } from "react";
 import CustomButton from "../CustomButton";
 import CustomTextField from "../CustomTextField";
+import { CustomRadioGroup } from "../CustomRadioGroup";
 import {
   useDeleteSide,
   useInvalidateSides,
   useGetAllSides,
   useCreateSide,
-  useUpdateSideActive,
+  useUpdateSide,
 } from "../../hooks/useSides";
 import { useModalStore } from "../../stores/modalStore";
 import type { Side } from "../../types/sides";
 import { Loader } from "..";
 import { TrashIcon } from "../../assets/icons/TrashIcon";
+import toast from "react-hot-toast";
 
 interface SidesModalProps {
   title?: string;
@@ -21,7 +23,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   const { data, isLoading } = useGetAllSides();
   const createSide = useCreateSide();
   const deleteSide = useDeleteSide();
-  const updateActive = useUpdateSideActive();
+  const updateSide = useUpdateSide();
   const invalidate = useInvalidateSides();
   const { closeModal } = useModalStore();
 
@@ -29,6 +31,9 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
 
   const [newSide, setNewSide] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [editedSides, setEditedSides] = useState<
+    Record<number, { name: string; isActive: boolean }>
+  >({});
 
   const handleAdd = async () => {
     const name = newSide.trim();
@@ -36,6 +41,13 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
     setSubmitting(true);
     try {
       await createSide.mutateAsync({ name });
+      toast.success("Guarnición creada exitosamente", {
+        duration: 4000,
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-gray-600)",
+        },
+      });
       setNewSide("");
       invalidate();
     } finally {
@@ -47,20 +59,75 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
     setSubmitting(true);
     try {
       await deleteSide.mutateAsync({ id });
+      toast.success("Guarnición eliminada exitosamente", {
+        duration: 4000,
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-gray-600)",
+        },
+      });
       invalidate();
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleToggle = async (side: Side) => {
+  const handleNameChange = (sideId: number, newName: string) => {
+    setEditedSides((prev) => ({
+      ...prev,
+      [sideId]: {
+        ...prev[sideId],
+        name: newName,
+        isActive:
+          prev[sideId]?.isActive ??
+          sides.find((s) => s.id === sideId)?.isActive ??
+          false,
+      },
+    }));
+  };
+
+  const handleAvailabilityChange = (sideId: number, isActive: boolean) => {
+    setEditedSides((prev) => ({
+      ...prev,
+      [sideId]: {
+        ...prev[sideId],
+        name:
+          prev[sideId]?.name ?? sides.find((s) => s.id === sideId)?.name ?? "",
+        isActive,
+      },
+    }));
+  };
+
+  const handleSave = async () => {
     setSubmitting(true);
     try {
-      await updateActive.mutateAsync({
-        id: side.id,
-        data: { isActive: !side.isActive },
-      });
+      const updatePromises = Object.entries(editedSides).map(
+        ([sideId, changes]) =>
+          updateSide.mutateAsync({
+            id: parseInt(sideId),
+            data: changes,
+          })
+      );
+
+      await Promise.all(updatePromises);
+      setEditedSides({});
       invalidate();
+      toast.success("Guarniciones actualizadas exitosamente", {
+        duration: 4000,
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-gray-600)",
+        },
+      });
+      closeModal();
+    } catch (error) {
+      toast.error("Error al actualizar las guarniciones", {
+        duration: 4000,
+        style: {
+          background: "var(--color-white)",
+          color: "var(--color-gray-600)",
+        },
+      });
     } finally {
       setSubmitting(false);
     }
@@ -69,7 +136,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3 max-h-[36vh] overflow-auto pr-2">
+        <div className="flex flex-col gap-4 max-h-[36vh] overflow-auto pr-2">
           {isLoading ? (
             <Loader />
           ) : sides.length === 0 ? (
@@ -80,31 +147,55 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
             </div>
           ) : (
             sides.map((side) => (
-              <div
-                key={side.id}
-                className="flex items-center justify-between py-1"
-              >
-                <label className="flex items-center gap-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 accent-[var(--color-primary-500)]"
-                    checked={side.isActive}
-                    onChange={() => handleToggle(side)}
-                  />
-                  <span className="text-gray-800">{side.name}</span>
-                </label>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <CustomButton
-                    onClick={() => handleDelete(side.id)}
-                    sx={{ padding: 0, minWidth: 0 }}
-                  >
-                    <TrashIcon color="var(--color-red-500)" />
-                  </CustomButton>
+              <div key={side.id} className="p-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-row gap-6">
+                    <div className="flex-1">
+                      <CustomTextField
+                        label="Guarnición"
+                        value={editedSides[side.id]?.name ?? side.name}
+                        onChange={(e) =>
+                          handleNameChange(side.id, e.target.value)
+                        }
+                        fullWidth
+                      />
+                    </div>
+
+                    <div className="flex-1 -mt-2">
+                      <CustomRadioGroup
+                        label="Disponible"
+                        value={
+                          editedSides[side.id]?.isActive ?? side.isActive
+                            ? "si"
+                            : "no"
+                        }
+                        onChange={(value: string) => {
+                          const newActive = value === "si";
+                          handleAvailabilityChange(side.id, newActive);
+                        }}
+                        options={[
+                          { value: "si", label: "Si" },
+                          { value: "no", label: "No" },
+                        ]}
+                        vertical={true}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center">
+                    <CustomButton
+                      onClick={() => handleDelete(side.id)}
+                      sx={{
+                        padding: 0,
+                        minWidth: 0,
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      }}
+                    >
+                      <TrashIcon color="var(--color-red-500)" />
+                    </CustomButton>
+                  </div>
                 </div>
               </div>
             ))
@@ -163,7 +254,8 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
           </CustomButton>
           <CustomButton
             variant="contained"
-            onClick={closeModal}
+            onClick={handleSave}
+            disabled={submitting || Object.keys(editedSides).length === 0}
             sx={{
               backgroundColor: "var(--color-primary-500)",
               "&:hover": {

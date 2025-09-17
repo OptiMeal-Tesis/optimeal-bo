@@ -21,6 +21,7 @@ interface CustomRadioGroupProps {
   required?: boolean;
   disabled?: boolean;
   row?: boolean;
+  vertical?: boolean;
 }
 
 export const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
@@ -32,20 +33,24 @@ export const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   required = false,
   disabled = false,
   row = true,
+  vertical = false,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className={vertical ? "flex flex-col" : "flex items-center gap-4"}>
       <FormLabel
         component="legend"
         sx={{
           fontFamily: "var(--font-family-sans)",
-          color: "var(--color-gray-700)",
+          color: vertical ? "var(--color-gray-500)" : "var(--color-gray-700)",
           margin: 0,
-          minWidth: "fit-content",
+          minWidth: vertical ? "auto" : "fit-content",
+          fontSize: vertical ? "0.75rem" : "1rem",
+          fontWeight: vertical ? 400 : 400,
+          lineHeight: vertical ? "1.25rem" : "1.5rem",
         }}
       >
         {label}

@@ -29,7 +29,7 @@ export const Orders = () => {
       duration: 4000,
       style: {
         background: "var(--color-white)",
-        color: "var(--color-error)",
+        color: "var(--color-gray-600)",
       },
     });
   }

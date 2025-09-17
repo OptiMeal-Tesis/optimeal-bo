@@ -14,7 +14,7 @@ export type GetSidesResponse = ApiResult<Side[]>;
 export type CreateSideRequest = { name: string };
 export type CreateSideResponse = ApiResult<Side>;
 export type DeleteSideResponse = ApiResult<null>;
-export type UpdateSideActiveRequest = { isActive: boolean };
-export type UpdateSideActiveResponse = ApiResult<Side>;
+export type UpdateSideRequest = { name: string; isActive: boolean };
+export type UpdateSideResponse = ApiResult<Side>;
 
 

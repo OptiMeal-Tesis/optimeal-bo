@@ -1,9 +1,9 @@
 import React from "react";
 import type { Order, OrderStatus, PaginationInfo } from "../types/orders";
-import { OrderStatusSelect } from "./OrderStatusSelect";
 import { useUpdateOrderStatus } from "../hooks/useOrders";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { OrderStatusSelect } from "./OrderStatusSelect";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -50,7 +50,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
         duration: 3000,
         style: {
           background: "var(--color-white)",
-          color: "var(--color-success)",
+          color: "var(--color-gray-600)",
         },
       });
     } catch (error) {
@@ -58,7 +58,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
         duration: 4000,
         style: {
           background: "var(--color-white)",
-          color: "var(--color-error)",
+          color: "var(--color-gray-600)",
         },
       });
     }
@@ -107,10 +107,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 ID Orden
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Usuario
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Estado
+                Cliente
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Total
@@ -120,6 +117,9 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Items
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Estado
               </th>
             </tr>
           </thead>
@@ -131,17 +131,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">{order.user.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="w-32">
-                    <OrderStatusSelect
-                      value={order.status}
-                      onChange={(newStatus) =>
-                        handleStatusChange(order.id, newStatus)
-                      }
-                      disabled={updateStatusMutation.isPending}
-                      size="small"
-                    />
+                  <div className="text-xs text-gray-500">
+                    DNI: {order.user.nationalId}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -175,6 +166,14 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                       </div>
                     ))}
                   </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <OrderStatusSelect
+                    value={order.status}
+                    onChange={(status) => handleStatusChange(order.id, status)}
+                    disabled={updateStatusMutation.isPending}
+                    size="small"
+                  />
                 </td>
               </tr>
             ))}

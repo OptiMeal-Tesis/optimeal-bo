@@ -6,15 +6,21 @@ import { Modal } from "./Modal";
 import { SidesModal } from "./modals/SidesModal";
 import { DeleteProductModal } from "./modals/DeleteProductModal";
 
-const modalRegistry = {
+const modalRegistry: Record<
+  keyof typeof ModalEnum,
+  { component: React.ComponentType<any>; size: "sm" | "md" | "lg" | "xl" }
+> = {
   [ModalEnum.PRODUCT_MODAL]: {
     component: ProductModal,
+    size: "lg",
   },
   [ModalEnum.SIDES_MODAL]: {
     component: SidesModal,
+    size: "md",
   },
   [ModalEnum.DELETE_CONFIRMATION_MODAL]: {
     component: DeleteProductModal,
+    size: "md",
   },
 };
 
@@ -30,10 +36,15 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
       modalRegistry[selectedModal as keyof typeof modalRegistry];
     if (!modalConfig) return null;
 
-    const { component: ModalComponent } = modalConfig;
+    const { component: ModalComponent, size } = modalConfig;
 
     return (
-      <Modal isOpen={true} onClose={closeModal} title={modalProps?.title}>
+      <Modal
+        isOpen={true}
+        onClose={closeModal}
+        title={modalProps?.title}
+        size={size}
+      >
         <ModalComponent {...modalProps} />
       </Modal>
     );

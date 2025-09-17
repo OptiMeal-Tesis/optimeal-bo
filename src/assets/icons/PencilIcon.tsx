@@ -1,7 +1,7 @@
 export const PencilIcon = ({
   width = 24,
   height = 24,
-  color = "black",
+  color = "currentColor",
 }: {
   width?: number;
   height?: number;

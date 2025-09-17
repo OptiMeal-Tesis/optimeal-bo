@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await request<LoginResponse>(
         "POST",
-        "/auth/login",
+        "/auth/login?isBackoffice=true",
         credentials
       );
       if (response.success) {

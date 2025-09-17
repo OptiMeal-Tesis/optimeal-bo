@@ -59,7 +59,7 @@ export default function Login() {
             duration: 3000,
             style: {
               background: "var(--color-white)",
-              color: "var(--color-error)",
+              color: "var(--color-gray-600)",
             },
           }
         );

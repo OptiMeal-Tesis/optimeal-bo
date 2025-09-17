@@ -5,8 +5,8 @@ import type {
   CreateSideResponse,
   DeleteSideResponse,
   GetSidesResponse,
-  UpdateSideActiveRequest,
-  UpdateSideActiveResponse,
+  UpdateSideRequest,
+  UpdateSideResponse,
 } from '../types/sides';
 
 const SIDES_KEY = ['sides'];
@@ -33,9 +33,9 @@ export const useDeleteSide = () =>
     f: async ({ id }) => request('DELETE', `/sides/${id}`),
   });
 
-export const useUpdateSideActive = () =>
-  useBasicMutation<UpdateSideActiveResponse, { id: number; data: UpdateSideActiveRequest }>({
-    f: async ({ id, data }) => request('PUT', `/sides/${id}/active`, data),
+export const useUpdateSide = () =>
+  useBasicMutation<UpdateSideResponse, { id: number; data: UpdateSideRequest }>({
+    f: async ({ id, data }) => request('PUT', `/sides/${id}`, data),
   });
 
 export const useInvalidateSides = () => {

@@ -12,7 +12,6 @@ interface OrderStatusSelectProps {
 
 const statusOptions = [
   { value: "PENDING" as OrderStatus, label: "Pendiente" },
-  { value: "CONFIRMED" as OrderStatus, label: "Confirmado" },
   { value: "PREPARING" as OrderStatus, label: "Preparando" },
   { value: "READY" as OrderStatus, label: "Listo" },
   { value: "DELIVERED" as OrderStatus, label: "Entregado" },
@@ -23,8 +22,6 @@ const getStatusColor = (status: OrderStatus) => {
   switch (status) {
     case "PENDING":
       return "text-gray-600";
-    case "CONFIRMED":
-      return "text-blue-500";
     case "PREPARING":
       return "text-yellow-500";
     case "READY":

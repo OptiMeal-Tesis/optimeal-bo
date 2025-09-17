@@ -63,18 +63,34 @@ export const ProductItemCard = ({
           <CustomButton
             onClick={handleEditClick}
             sx={{
-              backgroundColor: "var(--color-primary-500)",
               padding: "0",
               minWidth: "40px",
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
+              height: "100%",
+              variant: "outlined",
+              borderColor: "var(--color-primary-500)",
+              borderWidth: "2px",
+              borderStyle: "solid",
+              borderRadius: "12px",
+              color: "var(--color-primary-500)",
               "&:hover": {
-                backgroundColor: "var(--color-primary-600)",
+                backgroundColor: "var(--color-primary-500)",
+                color: "var(--color-white)",
+                borderColor: "var(--color-primary-500)",
+                "& .edit-text": {
+                  color: "var(--color-white)",
+                },
+                "& .edit-icon": {
+                  color: "var(--color-white)",
+                },
               },
             }}
           >
-            <PencilIcon color="var(--color-white)" />
+            <div className="flex flex-row gap-2 items-center px-3">
+              <span className="edit-text text-body1 text-primary-500">
+                Editar
+              </span>
+              <PencilIcon />
+            </div>
           </CustomButton>
         </div>
       </div>

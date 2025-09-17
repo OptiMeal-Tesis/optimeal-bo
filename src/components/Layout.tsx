@@ -86,7 +86,7 @@ export default function Layout({ children }: LayoutProps) {
         {/* Admin and Logout at bottom */}
         <div className="flex gap-3 px-4 py-3 text-sub1 text-primary-500 items-center justify-between">
           <span>Admin</span>
-          <LogOutIcon color="var(--color-error)" onClick={handleLogout} />
+          <LogOutIcon color="var(--color-gray-700)" onClick={handleLogout} />
         </div>
       </aside>
 

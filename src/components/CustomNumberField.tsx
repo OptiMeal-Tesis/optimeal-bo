@@ -31,10 +31,14 @@ export const CustomNumberField = ({
       sx={{
         "& .MuiOutlinedInput-root": {
           height: "44px",
+          borderRadius: "12px",
           "& fieldset": {
             borderColor: "#d1d5db",
           },
           "&:hover fieldset": {
+            borderColor: "var(--color-primary-500)",
+          },
+          "&.Mui-focused fieldset": {
             borderColor: "var(--color-primary-500)",
           },
         },

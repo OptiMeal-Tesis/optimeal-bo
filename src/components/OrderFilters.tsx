@@ -58,7 +58,7 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
         />
 
         <CustomTextField
-          label="DNI del Usuario"
+          label="DNI del Cliente"
           placeholder="Ej: 12345678"
           value={localFilters.nationalId || ""}
           onChange={(e) =>
@@ -73,7 +73,7 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
         />
 
         <CustomTextField
-          label="Nombre del Usuario"
+          label="Nombre del Cliente"
           placeholder="Ej: Juan Pérez"
           value={localFilters.userName || ""}
           onChange={(e) =>

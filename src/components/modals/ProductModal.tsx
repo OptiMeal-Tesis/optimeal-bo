@@ -190,7 +190,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
               duration: 4000,
               style: {
                 background: "var(--color-white)",
-                color: "var(--color-success)",
+                color: "var(--color-gray-600)",
               },
             });
             invalidateProducts();
@@ -202,7 +202,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
               duration: 4000,
               style: {
                 background: "var(--color-white)",
-                color: "var(--color-error)",
+                color: "var(--color-gray-600)",
               },
             });
           });
@@ -217,7 +217,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
               duration: 4000,
               style: {
                 background: "var(--color-white)",
-                color: "var(--color-success)",
+                color: "var(--color-gray-600)",
               },
             });
             invalidateProducts();
@@ -228,7 +228,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
               duration: 4000,
               style: {
                 background: "var(--color-white)",
-                color: "var(--color-error)",
+                color: "var(--color-gray-600)",
               },
             });
           });

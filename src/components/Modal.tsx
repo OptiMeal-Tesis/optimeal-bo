@@ -7,6 +7,7 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   title?: string;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -14,6 +15,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   title,
+  size = "lg",
 }) => {
   if (!isOpen) return null;
 
@@ -26,6 +28,21 @@ export const Modal: React.FC<ModalProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") {
       onClose();
+    }
+  };
+
+  const getSizeClasses = () => {
+    switch (size) {
+      case "sm":
+        return "max-w-md";
+      case "md":
+        return "max-w-2xl";
+      case "lg":
+        return "max-w-4xl";
+      case "xl":
+        return "max-w-6xl";
+      default:
+        return "max-w-4xl";
     }
   };
 
@@ -43,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Modal content */}
       <div
-        className={`relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-hidden`}
+        className={`relative bg-white rounded-lg shadow-xl w-full ${getSizeClasses()} mx-4 max-h-[90vh] overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
