@@ -14,7 +14,6 @@ const timeSlots = [
   { value: "12-13", label: "12:00 - 13:00" },
   { value: "13-14", label: "13:00 - 14:00" },
   { value: "14-15", label: "14:00 - 15:00" },
-  { value: "todos", label: "Todos" },
 ];
 
 export const TimePicker: React.FC<TimePickerProps> = ({
@@ -51,8 +50,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           },
         }}
       >
-        <MenuItem value="">
-          <span className="text-body1 text-gray-500">Seleccione turno</span>
+        <MenuItem
+          value=""
+          sx={{ fontFamily: "var(--font-family-sans)", fontSize: "14px" }}
+        >
+          Todos
         </MenuItem>
         {timeSlots.map((slot) => (
           <MenuItem

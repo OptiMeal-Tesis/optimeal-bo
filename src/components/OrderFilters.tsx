@@ -12,7 +12,6 @@ interface OrderFiltersProps {
 
 export const OrderFilters: React.FC<OrderFiltersProps> = ({
   onFiltersChange,
-  filters,
   setFilters,
   isLoading = false,
 }) => {
@@ -27,16 +26,11 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
   // Debounce effect - wait 500ms after user stops typing
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters(localFilters);
+      onFiltersChangeRef.current(localFilters);
     }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [localFilters]);
-
-  // Notify parent when filters change
-  useEffect(() => {
-    onFiltersChangeRef.current(filters);
-  }, []);
 
   const handleClearFilters = () => {
     setFilters({});
