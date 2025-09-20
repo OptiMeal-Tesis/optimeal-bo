@@ -5,7 +5,12 @@ interface MealCardProps {
   name: string;
 }
 
-export default function MealCard({ image, remainingToPrepare, total, name }: MealCardProps) {
+export default function MealCard({
+  image,
+  remainingToPrepare,
+  total,
+  name,
+}: MealCardProps) {
   return (
     <div className="bg-white rounded-2xl border-2 border-primary-500 p-3 w-1/3">
       <div className="flex items-center gap-3">
