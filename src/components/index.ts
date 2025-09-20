@@ -21,3 +21,5 @@ export { OrderFilters } from './OrderFilters';
 export { OrderStatusSelect } from './OrderStatusSelect';
 export { TimePicker } from './TimePicker';
 export { Pagination } from './Pagination';
+export { default as SideCard } from './SideCard';
+export { default as ShiftSummary } from './ShiftSummary';

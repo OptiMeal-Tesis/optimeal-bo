@@ -1,9 +1,9 @@
 import React from "react";
 import type { Order, OrderStatus, PaginationInfo } from "../types/orders";
 import { useUpdateOrderStatus } from "../hooks/useOrders";
-import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { OrderStatusSelect } from "./OrderStatusSelect";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -46,8 +46,9 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
         status: newStatus,
       });
 
-      // Invalidate and refetch orders data
-      await queryClient.invalidateQueries({ queryKey: ["orders"] });
+      // Invalidate and refetch orders and shift summary data
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['shiftSummary'] });
 
       toast.success("Estado actualizado correctamente", {
         duration: 3000,

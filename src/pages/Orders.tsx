@@ -1,20 +1,25 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   OrdersTable,
   OrderFilters,
   TimePicker,
   Pagination,
+  ShiftSummary,
 } from "../components";
 import { useGetAllOrders } from "../hooks/useOrders";
 import type { OrderFilters as OrderFiltersType } from "../types/orders";
 import toast from "react-hot-toast";
 
 export const Orders = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<OrderFiltersType>({
     page: 1,
     limit: 10,
   });
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
+    searchParams.get("shift") || ""
+  );
   const { data: ordersResponse, isLoading, error } = useGetAllOrders(filters);
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
@@ -37,6 +42,21 @@ export const Orders = () => {
   const orders = ordersResponse?.data || [];
   const pagination = ordersResponse?.pagination;
 
+  // Apply initial filter when component mounts with URL shift parameter
+  useEffect(() => {
+    if (
+      selectedTimeSlot &&
+      selectedTimeSlot !== "" &&
+      selectedTimeSlot !== "todos"
+    ) {
+      setFilters((prev) => ({
+        ...prev,
+        shift: selectedTimeSlot,
+        page: 1,
+      }));
+    }
+  }, [selectedTimeSlot]);
+
   const handlePageChange = useCallback((page: number) => {
     setFilters((prev) => ({ ...prev, page }));
   }, []);
@@ -45,32 +65,51 @@ export const Orders = () => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
   }, []);
 
-  const handleTimeSlotChange = useCallback((timeSlot: string) => {
-    setSelectedTimeSlot(timeSlot);
+  const handleTimeSlotChange = useCallback(
+    (timeSlot: string) => {
+      setSelectedTimeSlot(timeSlot);
 
-    if (timeSlot === "todos" || timeSlot === "") {
-      setFilters((prev) => {
-        const { shift, ...rest } = prev;
-        return { ...rest, page: 1 };
-      });
-    } else {
-      setFilters((prev) => ({
-        ...prev,
-        shift: timeSlot,
-        page: 1,
-      }));
+      // Update URL parameters
+      const newSearchParams = new URLSearchParams(searchParams);
+      if (timeSlot === "" || timeSlot === "todos") {
+        newSearchParams.delete("shift");
+      } else {
+        newSearchParams.set("shift", timeSlot);
+      }
+      setSearchParams(newSearchParams);
+
+      if (timeSlot === "todos" || timeSlot === "") {
+        setFilters((prev) => {
+          const { shift, ...rest } = prev;
+          return { ...rest, page: 1 };
+        });
+      } else {
+        setFilters((prev) => ({
+          ...prev,
+          shift: timeSlot,
+          page: 1,
+        }));
+      }
+    },
+    [searchParams, setSearchParams]
+  );
+
+  // Map TimePicker values to shift values for the summary
+  const getShiftForSummary = (timeSlot: string) => {
+    if (timeSlot === "" || timeSlot === "todos") {
+      return "all";
     }
-  }, []);
+    return timeSlot;
+  };
 
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <span className="text-h2-bold text-primary-500">
-            Pedidos - {formattedDate}
-          </span>
-        </div>
+      <div className="flex items-center justify-between sticky top-0 z-10 bg-gray-100 py-2">
+        <span className="text-h2-bold text-primary-500">
+          Pedidos - {formattedDate}
+        </span>
+
         <div className="flex items-center gap-4">
           <TimePicker
             value={selectedTimeSlot}
@@ -80,12 +119,8 @@ export const Orders = () => {
         </div>
       </div>
 
-      {/* TODO: Cards de resumen de productos - Endpoint pendiente */}
-      <div className="bg-gray-50 p-4 rounded-lg">
-        <p className="text-sm text-gray-500 italic">
-          Cards de resumen de productos (endpoint pendiente)
-        </p>
-      </div>
+      {/* Shift Summary Cards */}
+      <ShiftSummary selectedShift={getShiftForSummary(selectedTimeSlot)} />
 
       {/* Filters */}
       <OrderFilters

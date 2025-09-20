@@ -7,12 +7,11 @@ import {
   useCreateProduct,
   useUpdateProduct,
   useGetProductById,
-  useInvalidateProductsQueryKey,
-  useInvalidateProductQueryKey,
 } from "../../hooks/useProducts";
 import { useGetActiveSides } from "../../hooks/useSides";
 import { ModalEnum } from "../../types/modal";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 import type { CreateProductRequest } from "../../types/products";
 import {
@@ -69,8 +68,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
 
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
-  const invalidateProducts = useInvalidateProductsQueryKey();
-  const invalidateProduct = useInvalidateProductQueryKey();
+  const queryClient = useQueryClient();
 
   // Get product data when editing
   const {
@@ -193,8 +191,8 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
                 color: "var(--color-gray-600)",
               },
             });
-            invalidateProducts();
-            invalidateProduct(productId);
+            queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['product', productId] });
             closeModal();
           })
           .catch((error: any) => {
@@ -220,7 +218,8 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
                 color: "var(--color-gray-600)",
               },
             });
-            invalidateProducts();
+            queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries({ queryKey: ['product', productId] });
             closeModal();
           })
           .catch((error: any) => {

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useBasicQuery, request } from './useApi';
 import type { CreateProductRequest } from '../types/products';
 
@@ -13,22 +13,6 @@ export const useGetAllProducts = () => {
       throw new Error(response.message || 'Failed to fetch products');
     },
   });
-};
-
-export const useInvalidateProductsQueryKey = () => {
-  const queryClient = useQueryClient();
-  
-  return () => {
-    queryClient.invalidateQueries({ queryKey: ['products'] });
-  };
-};
-
-export const useInvalidateProductQueryKey = () => {
-  const queryClient = useQueryClient();
-  
-  return (productId: string) => {
-    queryClient.invalidateQueries({ queryKey: ['product', productId] });
-  };
 };
 
 export const useGetProductById = (id: string) => {

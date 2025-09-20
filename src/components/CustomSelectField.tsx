@@ -92,6 +92,7 @@ const CustomSelectField = forwardRef<HTMLDivElement, CustomSelectFieldProps>(
           "& .MuiInputBase-root": {
             fontFamily: "var(--font-family-sans)",
             backgroundColor: "transparent",
+            borderRadius: "12px",
           },
           "& .MuiInputLabel-root": {
             fontFamily: "var(--font-family-sans)",

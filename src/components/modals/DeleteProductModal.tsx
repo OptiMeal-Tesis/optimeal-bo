@@ -2,10 +2,10 @@ import CustomButton from "../CustomButton";
 import { useModalStore } from "../../stores/modalStore";
 import {
   useDeleteProduct,
-  useInvalidateProductsQueryKey,
 } from "../../hooks/useProducts";
 import toast from "react-hot-toast";
 import ImagePlaceholder from "../../assets/images/image-placeholder.jpg";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DeleteProductModalProps {
   productId?: string;
@@ -20,8 +20,8 @@ export const DeleteProductModal = ({
 }: DeleteProductModalProps) => {
   const { closeModal } = useModalStore();
   const deleteProduct = useDeleteProduct();
-  const invalidateProducts = useInvalidateProductsQueryKey();
-
+  const queryClient = useQueryClient();
+  
   const handleDelete = async () => {
     if (!productId) return;
 
@@ -34,7 +34,7 @@ export const DeleteProductModal = ({
           color: "var(--color-gray-600)",
         },
       });
-      invalidateProducts();
+      queryClient.invalidateQueries({ queryKey: ['products'] });
       closeModal();
     } catch (error: any) {
       toast.error(error?.message || "Error al eliminar el producto", {

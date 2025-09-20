@@ -34,6 +34,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         displayEmpty
         sx={{
           fontFamily: "var(--font-family-sans)",
+          borderRadius: "12px",
           fontSize: "14px",
           "& .MuiSelect-select": {
             fontFamily: "var(--font-family-sans)",

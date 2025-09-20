@@ -4,7 +4,6 @@ import CustomTextField from "../CustomTextField";
 import { CustomRadioGroup } from "../CustomRadioGroup";
 import {
   useDeleteSide,
-  useInvalidateSides,
   useGetAllSides,
   useCreateSide,
   useUpdateSide,
@@ -14,6 +13,7 @@ import type { Side } from "../../types/sides";
 import { Loader } from "..";
 import { TrashIcon } from "../../assets/icons/TrashIcon";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SidesModalProps {
   title?: string;
@@ -24,9 +24,9 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   const createSide = useCreateSide();
   const deleteSide = useDeleteSide();
   const updateSide = useUpdateSide();
-  const invalidate = useInvalidateSides();
   const { closeModal } = useModalStore();
-
+  const queryClient = useQueryClient();
+  
   const sides: Side[] = useMemo(() => data?.data ?? [], [data]);
 
   const [newSide, setNewSide] = useState("");
@@ -49,7 +49,8 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
         },
       });
       setNewSide("");
-      invalidate();
+      queryClient.invalidateQueries({ queryKey: ['sides'] });
+
     } finally {
       setSubmitting(false);
     }
@@ -66,7 +67,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
           color: "var(--color-gray-600)",
         },
       });
-      invalidate();
+      queryClient.invalidateQueries({ queryKey: ['sides'] });
     } finally {
       setSubmitting(false);
     }
@@ -111,7 +112,8 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
 
       await Promise.all(updatePromises);
       setEditedSides({});
-      invalidate();
+      queryClient.invalidateQueries({ queryKey: ['sides'] });
+
       toast.success("Guarniciones actualizadas exitosamente", {
         duration: 4000,
         style: {
@@ -150,14 +152,13 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
               <div key={side.id} className="p-2">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-row gap-6">
-                    <div className="flex-1">
+                    <div className="min-w-[30%]">
                       <CustomTextField
                         label="Guarnición"
                         value={editedSides[side.id]?.name ?? side.name}
                         onChange={(e) =>
                           handleNameChange(side.id, e.target.value)
                         }
-                        fullWidth
                       />
                     </div>
 
