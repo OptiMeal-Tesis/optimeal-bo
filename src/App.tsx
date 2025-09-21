@@ -7,7 +7,7 @@ import "./App.css";
 import { ProtectedRoute, PublicRoute } from "./components";
 import { Orders } from "./pages/Orders";
 import { Products } from "./pages/Products";
-import { Stats } from "./components/Stats";
+import { Stats } from "./pages/Stats";
 import { Toaster } from "react-hot-toast";
 
 function AppRoutes() {

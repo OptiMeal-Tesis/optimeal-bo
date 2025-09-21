@@ -41,8 +41,8 @@ export const ProductItemCard = ({
       <div className="flex flex-col p-4 h-50">
         {/* Title and Description */}
         <div className="flex flex-col gap-2 flex-grow">
-          <span className="text-sub1-bold line-clamp-2">{name}</span>
-          <span className="text-body2 text-gray-500 line-clamp-3">
+          <span className="text-sub1-bold">{name}</span>
+          <span className="text-body2 text-gray-500">
             {description}
           </span>
         </div>

@@ -54,6 +54,7 @@ export const OrderStatusSelect: React.FC<OrderStatusSelectProps> = ({
         sx={{
           fontFamily: "var(--font-family-sans)",
           fontSize: "14px",
+          borderRadius: "12px",
           "& .MuiSelect-select": {
             fontFamily: "var(--font-family-sans)",
             padding: size === "small" ? "8px 12px" : "12px 16px",

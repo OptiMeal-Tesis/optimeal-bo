@@ -9,6 +9,7 @@ interface OrdersTableProps {
   orders: Order[];
   pagination?: PaginationInfo;
   isLoading?: boolean;
+  statsPage?: boolean;
 }
 
 const formatPrice = (price: number) => {
@@ -28,10 +29,23 @@ const formatTime = (dateString: string) => {
   });
 };
 
+const getStatusInfo = (status: OrderStatus) => {
+  const statusMap = {
+    PENDING: { label: "Pendiente", className: "text-gray-600" },
+    PREPARING: { label: "Preparando", className: "text-yellow-500" },
+    READY: { label: "Listo", className: "text-success" },
+    DELIVERED: { label: "Entregado", className: "text-primary-500" },
+    CANCELLED: { label: "Cancelado", className: "text-error" },
+  };
+
+  return statusMap[status] || { label: status, className: "text-gray-800" };
+};
+
 export const OrdersTable: React.FC<OrdersTableProps> = ({
   orders,
   pagination,
   isLoading,
+  statsPage = false,
 }) => {
   const updateStatusMutation = useUpdateOrderStatus();
   const queryClient = useQueryClient();
@@ -47,8 +61,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       });
 
       // Invalidate and refetch orders and shift summary data
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-      queryClient.invalidateQueries({ queryKey: ['shiftSummary'] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
 
       toast.success("Estado actualizado correctamente", {
         duration: 3000,
@@ -172,12 +186,24 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <OrderStatusSelect
-                    value={order.status}
-                    onChange={(status) => handleStatusChange(order.id, status)}
-                    disabled={updateStatusMutation.isPending}
-                    size="small"
-                  />
+                  {statsPage ? (
+                    <span
+                      className={`font-medium ${
+                        getStatusInfo(order.status).className
+                      }`}
+                    >
+                      {getStatusInfo(order.status).label}
+                    </span>
+                  ) : (
+                    <OrderStatusSelect
+                      value={order.status}
+                      onChange={(status) =>
+                        handleStatusChange(order.id, status)
+                      }
+                      disabled={updateStatusMutation.isPending}
+                      size="small"
+                    />
+                  )}
                 </td>
               </tr>
             ))}
