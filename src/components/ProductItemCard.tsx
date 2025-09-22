@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { CustomButton } from ".";
 import { PencilIcon } from "../assets/icons/PencilIcon";
 import { CustomNumberField } from "./CustomNumberField";
@@ -22,6 +23,7 @@ export const ProductItemCard = ({
   onStockChange,
 }: ProductItemCardProps) => {
   const { setSelectedModal } = useModalStore();
+  const [loaded, setLoaded] = useState(false);
 
   const handleEditClick = () => {
     setSelectedModal(ModalEnum.PRODUCT_MODAL, {
@@ -32,9 +34,25 @@ export const ProductItemCard = ({
 
   return (
     <div className="bg-white rounded-lg border border-gray-100 overflow-hidden w-full max-w-sm">
-      {/* Image Section */}
-      <div className="h-50 w-full overflow-hidden">
-        <img src={image} alt={name} className="w-full h-full object-cover" />
+
+      <div
+        className="relative w-full overflow-hidden bg-gray-100"
+        style={{ aspectRatio: "4 / 3" }}
+      >
+        {!loaded && (
+          <div className="absolute inset-0 animate-pulse bg-gray-200" />
+        )}
+        <img
+          src={image}
+          alt={name}
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+          onLoad={() => setLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
       </div>
 
       {/* Content Section */}
