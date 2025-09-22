@@ -12,7 +12,7 @@ export default function MealCard({
   name,
 }: MealCardProps) {
   return (
-    <div className="bg-white rounded-2xl border-2 border-primary-500 p-3 w-1/3">
+    <div className="bg-white rounded-2xl border-2 border-primary-500 p-3 w-full">
       <div className="flex items-center gap-3">
         {/* Left Section - Image */}
         <div className="flex-shrink-0">

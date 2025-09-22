@@ -83,7 +83,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
       {/* Main Dishes */}
       {shiftData.mainDishes.length > 0 && (
         <div>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-3 gap-4 w-full">
             {shiftData.mainDishes.map((dish) => (
               <MealCard
                 key={dish.id}

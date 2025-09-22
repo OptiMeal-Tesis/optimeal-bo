@@ -38,3 +38,12 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Remove blue focus/selection highlight inside donut chart */
+.donut-chart *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.donut-chart * {
+  -webkit-tap-highlight-color: transparent;
+}

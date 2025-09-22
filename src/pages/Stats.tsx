@@ -88,20 +88,46 @@ export const Stats: React.FC = () => {
       });
     });
 
-    const colors = [
-      "#3B82F6",
-      "#10B981",
-      "#F59E0B",
-      "#EF4444",
-      "#8B5CF6",
-      "#06B6D4",
+    const getCssVar = (name: string) =>
+      window
+        .getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim() || undefined;
+
+    const primaryShades = [
+      getCssVar("--color-primary-300"),
+      getCssVar("--color-primary-400"),
+      getCssVar("--color-primary-600"),
+    ].filter(Boolean) as string[];
+
+    const accentColors = [
+      "#FFB74D", // orange
+      "#26C6DA", // cyan
+      "#7E57C2", // purple
+      "#FF7043", // deep orange
+      "#66BB6A", // green (not success token)
+      "#EC407A", // pink
     ];
 
-    return Object.entries(productCounts).map(([name, value], index) => ({
-      name,
-      value,
-      color: colors[index % colors.length],
-    }));
+    // Interleave primary with accents for better contrast
+    const colors = (() => {
+      const out: string[] = [];
+      const maxLen = Math.max(primaryShades.length, accentColors.length);
+      for (let i = 0; i < maxLen; i++) {
+        if (primaryShades[i]) out.push(primaryShades[i]);
+        if (accentColors[i]) out.push(accentColors[i]);
+      }
+      return out;
+    })();
+
+    return Object.entries(productCounts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .map((item, index) => ({
+        name: item.name,
+        value: item.value,
+        color: colors[index % colors.length],
+      }));
   }, [statsData]);
 
   const totalItems = donutChartData.reduce((sum, item) => sum + item.value, 0);
