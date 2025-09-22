@@ -6,6 +6,8 @@ import { OrderIcon } from "../assets/icons/OrderIcon";
 import { FoodIcon } from "../assets/icons/FoodIcon";
 import { StatsIcon } from "../assets/icons/StatsIcon";
 import { LogOutIcon } from "../assets/icons/LogOutIcon";
+import { useGetCurrentUser } from "../hooks/useUser";
+import { UserIcon } from "../assets/icons/UserIcon";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -39,6 +41,19 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { data: currentUser } = useGetCurrentUser();
+
+  const getInitials = (name?: string) => {
+    if (!name) return "";
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return "";
+    if (parts.length === 1) {
+      const word = parts[0];
+      const firstTwo = (word[0] || "") + (word[1] || "");
+      return firstTwo.toUpperCase();
+    }
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
 
   const handleLogout = () => {
     logout();
@@ -85,7 +100,10 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Admin and Logout at bottom */}
         <div className="flex gap-3 px-4 py-3 text-sub1 text-primary-500 items-center justify-between">
-          <span>Admin</span>
+          <div className="flex flex-row items-center gap-2">
+            <UserIcon color="var(--color-primary-500)" />
+            <span>{getInitials(currentUser?.name)}</span>
+          </div>
           <LogOutIcon color="var(--color-gray-700)" onClick={handleLogout} />
         </div>
       </aside>
