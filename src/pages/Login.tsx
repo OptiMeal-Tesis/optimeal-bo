@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { CustomTextField, CustomButton } from "../components";
 import { useAuth } from "../contexts/AuthContext";
 import optimealLogo from "../assets/images/optimeal-logo.png";
