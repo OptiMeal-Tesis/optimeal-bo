@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { CustomTextField, CustomButton } from "../components";
 import { useAuth } from "../contexts/AuthContext";
-import optimealLogo from "../assets/images/optimeal-logo.png";
+import { Logo } from "../assets/Logo";
 import trayImage from "../assets/images/tray.png";
 
 export default function Login() {
@@ -121,12 +121,8 @@ export default function Login() {
           {/* Right Column - Logo and Form */}
           <div className="flex flex-col justify-center gap-10 w-1/2">
             {/* OptiMeal Logo */}
-            <div>
-              <img
-                src={optimealLogo}
-                alt="OptiMeal Logo"
-                className="mx-auto max-w-[240px] h-auto"
-              />
+            <div className="flex justify-center items-center">
+              <Logo width={200} height={50} />
             </div>
 
             {/* Form */}

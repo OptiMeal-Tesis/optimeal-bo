@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import optimealLogo from "../assets/images/optimeal-logo.png";
+import { Logo } from "../assets/Logo";
 import { OrderIcon } from "../assets/icons/OrderIcon";
 import { FoodIcon } from "../assets/icons/FoodIcon";
 import { StatsIcon } from "../assets/icons/StatsIcon";
@@ -66,8 +66,8 @@ export default function Layout({ children }: LayoutProps) {
       <aside className="fixed left-0 top-0 w-64 h-screen bg-white flex flex-col border-r border-gray-200 z-10">
         {/* Logo at the top */}
         <div className="p-4">
-          <div className="flex items-center gap-3">
-            <img src={optimealLogo} alt="OptiMeal Logo" />
+          <div className="flex items-center justify-center gap-3">
+            <Logo width={200} height={55} />
           </div>
         </div>
 
