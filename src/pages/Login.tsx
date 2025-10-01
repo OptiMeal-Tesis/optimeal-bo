@@ -4,11 +4,14 @@ import toast from "react-hot-toast";
 import { CustomTextField, CustomButton } from "../components";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "../assets/Logo";
+import EyeOpenIcon from "../assets/icons/EyeOpenIcon";
+import EyeClosedIcon from "../assets/icons/EyeClosedIcon";
 import trayImage from "../assets/images/tray.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
@@ -143,7 +146,7 @@ export default function Login() {
 
               <CustomTextField
                 label="Contraseña"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => handleFieldChange("password", e.target.value)}
                 onBlur={() => handleFieldBlur("password")}
@@ -153,6 +156,12 @@ export default function Login() {
                 required
                 helperText={touched.password && errors.password}
                 disabled={isSubmitting}
+                rightIcon={showPassword ? (
+                  <EyeOpenIcon width={20} height={20} />
+                ) : (
+                  <EyeClosedIcon width={20} height={20} />
+                )}
+                onRightIconClick={() => setShowPassword((prev) => !prev)}
               />
             </form>
 

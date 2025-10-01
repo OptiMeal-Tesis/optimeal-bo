@@ -1,14 +1,16 @@
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField, InputAdornment, IconButton } from "@mui/material";
 import type { TextFieldProps } from "@mui/material";
 import { forwardRef } from "react";
 
 export interface CustomTextFieldProps extends Omit<TextFieldProps, 'variant'> {
   variant?: 'outlined' | 'filled' | 'standard';
   prefix?: string;
+  rightIcon?: React.ReactNode;
+  onRightIconClick?: () => void;
 }
 
 const CustomTextField = forwardRef<HTMLDivElement, CustomTextFieldProps>(
-  ({ sx, error, prefix, InputProps, ...props }, ref) => {
+  ({ sx, error, prefix, rightIcon, onRightIconClick, InputProps, ...props }, ref) => {
     return (
       <TextField
         ref={ref}
@@ -44,6 +46,22 @@ const CustomTextField = forwardRef<HTMLDivElement, CustomTextFieldProps>(
                     >
                       {prefix}
                     </span>
+                  </InputAdornment>
+                ),
+              }
+            : {}),
+          ...(rightIcon
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="right icon"
+                      edge="end"
+                      onClick={onRightIconClick}
+                      tabIndex={-1}
+                    >
+                      {rightIcon}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }
