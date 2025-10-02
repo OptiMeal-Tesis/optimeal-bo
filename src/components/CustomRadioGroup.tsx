@@ -83,6 +83,7 @@ export const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
               label={option.label}
               sx={{
                 fontFamily: "var(--font-family-sans)",
+                color: "var(--color-black)",
                 "& .MuiFormControlLabel-label": {
                   fontFamily: "var(--font-family-sans)",
                 },

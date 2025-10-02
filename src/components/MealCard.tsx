@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ImagePlaceholder from "../assets/images/image-placeholder.jpg";
 
 interface MealCardProps {
   image: string;
@@ -26,7 +27,7 @@ export default function MealCard({
           )}
           
           <img
-            src={image}
+            src={image || ImagePlaceholder }
             alt={name}
             onLoad={() => setLoaded(true)}
             className={`w-20 h-20 rounded-lg object-cover transition-opacity duration-300 ${

@@ -8,7 +8,13 @@ export const useGetAllProducts = () => {
     f: async () => {
       const response = await request('GET', '/products');
       if (response.success) {
-        return response.data;
+        const data = response.data as any;
+        if (data && (Array.isArray(data.foods) || Array.isArray(data.beverages))) {
+          const foods = Array.isArray(data.foods) ? data.foods : [];
+          const beverages = Array.isArray(data.beverages) ? data.beverages : [];
+          return [...foods, ...beverages];
+        }
+        return data;
       }
       throw new Error(response.message || 'Failed to fetch products');
     },
