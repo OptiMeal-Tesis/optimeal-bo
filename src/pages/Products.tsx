@@ -43,7 +43,7 @@ export const Products = () => {
       // Clear existing timeout for this product
       const existingTimeout = debounceTimeouts.current.get(productId);
       if (existingTimeout) {
-        clearTimeout(existingTimeout);
+        window.clearTimeout(existingTimeout);
       }
 
       // Update cache immediately for responsive UI
@@ -60,7 +60,7 @@ export const Products = () => {
       );
 
       // Set new timeout for API call. Avoids multiple requests.
-      const timeout = setTimeout(async () => {
+      const timeout = window.setTimeout(async () => {
         try {
           await updateProductMutation.mutateAsync({
             id: currentProduct.id.toString(),
