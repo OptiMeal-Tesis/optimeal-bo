@@ -57,12 +57,6 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           },
         }}
       >
-        <MenuItem
-          value=""
-          sx={{ fontFamily: "var(--font-family-sans)", fontSize: "14px" }}
-        >
-          Todos
-        </MenuItem>
         {shifts.map((shift) => (
           <MenuItem
             key={shift}
