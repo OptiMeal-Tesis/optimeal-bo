@@ -12,6 +12,7 @@ interface OrderFiltersProps {
 
 export const OrderFilters: React.FC<OrderFiltersProps> = ({
   onFiltersChange,
+  filters,
   setFilters,
   isLoading = false,
 }) => {
@@ -33,7 +34,9 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
   }, [localFilters]);
 
   const handleClearFilters = () => {
-    setFilters({});
+    const currentShift = filters.shift;
+    setFilters(currentShift ? { shift: currentShift } : {});
+    setLocalFilters({});
   };
 
   return (

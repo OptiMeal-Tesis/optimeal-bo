@@ -18,7 +18,7 @@ export const Orders = () => {
     limit: 10,
   });
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
-    searchParams.get("shift") || ""
+    searchParams.get("shift") || "all"
   );
   const { data: ordersResponse, isLoading, error } = useGetAllOrders(filters, { enableRealtime: true });
   const today = new Date();
@@ -55,6 +55,11 @@ export const Orders = () => {
         shift: selectedTimeSlot,
         page: 1,
       }));
+    } else if (selectedTimeSlot === "all") {
+      setFilters((prev) => {
+        const { shift, ...rest } = prev;
+        return { ...rest, page: 1 };
+      });
     }
   }, [selectedTimeSlot]);
 
