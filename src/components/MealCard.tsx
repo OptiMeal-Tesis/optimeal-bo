@@ -3,6 +3,7 @@ import ImagePlaceholder from "../assets/images/image-placeholder.jpg";
 
 interface MealCardProps {
   image: string;
+  preparedQuantity: number;
   remainingToPrepare: number;
   total: number;
   name: string;
@@ -10,6 +11,7 @@ interface MealCardProps {
 
 export default function MealCard({
   image,
+  preparedQuantity,
   remainingToPrepare,
   total,
   name,
@@ -39,14 +41,20 @@ export default function MealCard({
         {/* Right Section - Text Content */}
         <div className="flex flex-col justify-between min-h-20 min-w-0 flex-1">
           {/* Top Line - Delivery Status */}
-          <div className="text-sub1 text-primary-500 leading-tight mb-2">
-            <span>Por entregar: </span>
-            <span className="font-bold">{remainingToPrepare}</span>
-            <span>/{total}</span>
+          <div className="flex flex-col gap-0.5">
+            <div className="text-sub1 text-primary-500 leading-tight">
+              <span>Entregado: </span>
+              <span>{preparedQuantity}</span>
+              <span>/{total}</span>
+            </div>
+            <div className="text-sub1 text-primary-500 leading-tight mb-2">
+              <span>Por entregar: </span>
+              <span className="font-bold">{remainingToPrepare}</span>
+            </div>
           </div>
 
           {/* Bottom Line - Meal Name */}
-          <div className="text-body1 text-gray-400 leading-relaxed">{name}</div>
+          <div className="text-body1 text-gray-600 leading-relaxed">{name}</div>
         </div>
       </div>
     </div>

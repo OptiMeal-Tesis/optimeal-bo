@@ -122,29 +122,33 @@ export const Orders = () => {
       {/* Shift Summary Cards */}
       <ShiftSummary selectedShift={getShiftForSummary(selectedTimeSlot)} />
 
-      {/* Filters */}
-      <OrderFilters
-        onFiltersChange={handleFiltersChange}
-        filters={filters}
-        setFilters={setFilters}
-        isLoading={isLoading}
-      />
 
-      {/* Orders Table */}
-      <OrdersTable
-        orders={orders}
-        pagination={pagination}
-        isLoading={isLoading}
-      />
-
-      {/* Pagination */}
-      {pagination && pagination.totalPages > 1 && (
-        <Pagination
-          pagination={pagination}
-          onPageChange={handlePageChange}
+      <div className="flex flex-col gap-2 mt-4">
+        <span className="text-sub1 text-primary-500">Pedidos</span>
+        {/* Filters */}
+        <OrderFilters
+          onFiltersChange={handleFiltersChange}
+          filters={filters}
+          setFilters={setFilters}
           isLoading={isLoading}
         />
-      )}
+
+        {/* Orders Table */}
+        <OrdersTable
+          orders={orders}
+          pagination={pagination}
+          isLoading={isLoading}
+        />
+
+        {/* Pagination */}
+        {pagination && pagination.totalPages > 1 && (
+          <Pagination
+            pagination={pagination}
+            onPageChange={handlePageChange}
+            isLoading={isLoading}
+          />
+        )}
+      </div>
     </div>
   );
 };

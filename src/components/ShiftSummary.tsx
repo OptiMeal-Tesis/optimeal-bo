@@ -27,7 +27,8 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
     return (
       <div className="space-y-6">
         {/* Main Dishes Skeleton */}
-        <div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sub1 text-primary-500">Platos principales</span>
           <div className="flex flex-row gap-4">
             {[1, 2, 3].map((i) => (
               <div
@@ -47,7 +48,8 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
         </div>
 
         {/* Sides Skeleton */}
-        <div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sub1 text-primary-500">Guarniciones</span>
           <div className="flex flex-row gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
@@ -82,12 +84,14 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
     <div className="flex flex-col gap-4">
       {/* Main Dishes */}
       {shiftData.mainDishes.length > 0 && (
-        <div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sub1 text-primary-500">Platos principales</span>
           <div className="grid grid-cols-3 gap-4 w-full">
             {shiftData.mainDishes.map((dish) => (
               <MealCard
                 key={dish.id}
-                image={dish.photo}
+                image={dish.photo}  
+                preparedQuantity={dish.preparedQuantity}
                 remainingToPrepare={dish.remainingToPrepare}
                 total={dish.totalToPrepare}
                 name={dish.name}
@@ -99,7 +103,8 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
 
       {/* Sides */}
       {shiftData.sides.length > 0 && (
-        <div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sub1 text-primary-500">Guarniciones</span>
           <div className="flex flex-wrap gap-4">
             {shiftData.sides.map((side) => (
               <SideCard
