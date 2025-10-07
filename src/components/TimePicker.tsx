@@ -1,6 +1,7 @@
 import React from "react";
 import { Select, MenuItem, FormControl } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import { useShifts } from "../hooks/useShifts";
 
 interface TimePickerProps {
   value: string;
@@ -9,25 +10,30 @@ interface TimePickerProps {
   size?: "small" | "medium";
 }
 
-const timeSlots = [
-  { value: "11-12", label: "11:00 - 12:00" },
-  { value: "12-13", label: "12:00 - 13:00" },
-  { value: "13-14", label: "13:00 - 14:00" },
-  { value: "14-15", label: "14:00 - 15:00" },
-];
-
 export const TimePicker: React.FC<TimePickerProps> = ({
   value,
   onChange,
   disabled = false,
   size = "medium",
 }) => {
+  const { data: shiftsResponse, isLoading } = useShifts();
+  const shifts = shiftsResponse?.data || [];
+
   const handleChange = (event: SelectChangeEvent<string>) => {
     onChange(event.target.value);
   };
 
+  // Format shift for display
+  const formatShiftLabel = (shift: string) => {
+    if (shift === "all") {
+      return "Todos";
+    }
+    // Convert "11-11:30" to "11:00 - 11:30"
+    return shift.replace("-", " - ");
+  };
+
   return (
-    <FormControl size={size} disabled={disabled} sx={{ minWidth: "150px" }}>
+    <FormControl size={size} disabled={disabled || isLoading} sx={{ minWidth: "150px" }}>
       <Select
         value={value}
         onChange={handleChange}
@@ -57,16 +63,16 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         >
           Todos
         </MenuItem>
-        {timeSlots.map((slot) => (
+        {shifts.map((shift) => (
           <MenuItem
-            key={slot.value}
-            value={slot.value}
+            key={shift}
+            value={shift}
             sx={{
               fontFamily: "var(--font-family-sans)",
               fontSize: "14px",
             }}
           >
-            {slot.label}
+            {formatShiftLabel(shift)}
           </MenuItem>
         ))}
       </Select>

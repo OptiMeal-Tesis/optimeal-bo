@@ -47,7 +47,8 @@ export const Orders = () => {
     if (
       selectedTimeSlot &&
       selectedTimeSlot !== "" &&
-      selectedTimeSlot !== "todos"
+      selectedTimeSlot !== "todos" &&
+      selectedTimeSlot !== "all"
     ) {
       setFilters((prev) => ({
         ...prev,
@@ -71,14 +72,14 @@ export const Orders = () => {
 
       // Update URL parameters
       const newSearchParams = new URLSearchParams(searchParams);
-      if (timeSlot === "" || timeSlot === "todos") {
+      if (timeSlot === "" || timeSlot === "todos" || timeSlot === "all") {
         newSearchParams.delete("shift");
       } else {
         newSearchParams.set("shift", timeSlot);
       }
       setSearchParams(newSearchParams);
 
-      if (timeSlot === "todos" || timeSlot === "") {
+      if (timeSlot === "todos" || timeSlot === "" || timeSlot === "all") {
         setFilters((prev) => {
           const { shift, ...rest } = prev;
           return { ...rest, page: 1 };
@@ -96,7 +97,7 @@ export const Orders = () => {
 
   // Map TimePicker values to shift values for the summary
   const getShiftForSummary = (timeSlot: string) => {
-    if (timeSlot === "" || timeSlot === "todos") {
+    if (timeSlot === "" || timeSlot === "todos" || timeSlot === "all") {
       return "all";
     }
     return timeSlot;
