@@ -20,7 +20,7 @@ export const Orders = () => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(
     searchParams.get("shift") || ""
   );
-  const { data: ordersResponse, isLoading, error } = useGetAllOrders(filters);
+  const { data: ordersResponse, isLoading, error } = useGetAllOrders(filters, { enableRealtime: true });
   const today = new Date();
   const formattedDate = today.toLocaleDateString("es-ES", {
     day: "numeric",

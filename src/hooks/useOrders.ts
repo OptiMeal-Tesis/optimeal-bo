@@ -1,6 +1,10 @@
 import { request, useBasicQuery, useBasicMutation } from "./useApi";
 import type { OrdersResponse, OrderFilters } from "../types/orders";
 import type { OrderStatus } from "../types/orders";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "../services/supabase";
+import toast from "react-hot-toast";
 
 export interface UpdateOrderStatusRequest {
   status: OrderStatus;
@@ -11,8 +15,16 @@ export interface UpdateOrderStatusResponse {
   message: string;
 }
 
-export const useGetAllOrders = (filters?: OrderFilters) => {
-  return useBasicQuery({
+export const useGetAllOrders = (
+  filters?: OrderFilters,
+  options?: {
+    enableRealtime?: boolean;
+  }
+) => {
+  const enableRealtime = options?.enableRealtime ?? true;
+  const queryClient = useQueryClient();
+
+  const query = useBasicQuery({
     queryKey: ["orders", filters],
     f: async () => {
       const params = new URLSearchParams();
@@ -52,6 +64,37 @@ export const useGetAllOrders = (filters?: OrderFilters) => {
       return response;
     },
   });
+  
+  useEffect(() => {
+    if (!enableRealtime) return;
+
+    const channel = supabase
+      .channel("orders-realtime")
+      .on("broadcast", { event: "new-order" }, (payload) => {
+        const data: any = payload.payload;
+        toast.success(`Nueva orden #${data?.order?.id ?? ""}`);
+        queryClient.invalidateQueries({ queryKey: ["orders"] });
+        queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
+      })
+      .on("broadcast", { event: "order-status-updated" }, (payload) => {
+        const data: any = payload.payload;
+        const prev = data?.previousStatus ?? "";
+        const next = data?.newStatus ?? "";
+        toast(`Orden #${data?.order?.id ?? ""}: ${prev} → ${next}`);
+        queryClient.invalidateQueries({ queryKey: ["orders"] });
+        queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
+      })
+      .on("broadcast", { event: "shift-summary-updated" }, () => {
+        queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [enableRealtime, queryClient]);
+
+  return query;
 };
 
 export const useUpdateOrderStatus = () => {
