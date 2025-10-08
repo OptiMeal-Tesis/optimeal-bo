@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { CustomTextField, CustomButton } from "../components";
@@ -45,6 +46,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     // Mark all fields as touched
     setTouched({ email: true, password: true });
@@ -129,64 +131,71 @@ export default function Login() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <CustomTextField
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => handleFieldChange("email", e.target.value)}
-                onBlur={() => handleFieldBlur("email")}
-                size="medium"
-                fullWidth
-                aria-label="Email address"
-                required
-                helperText={touched.email && errors.email}
-                disabled={isSubmitting}
-              />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+              <div className="flex flex-col gap-5">
+                <CustomTextField
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => handleFieldChange("email", e.target.value)}
+                  onBlur={() => handleFieldBlur("email")}
+                  size="medium"
+                  fullWidth
+                  aria-label="Email address"
+                  required
+                  helperText={touched.email && errors.email}
+                  disabled={isSubmitting}
+                />
 
-              <CustomTextField
-                label="Contraseña"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => handleFieldChange("password", e.target.value)}
-                onBlur={() => handleFieldBlur("password")}
-                size="medium"
-                fullWidth
-                aria-label="Password"
-                required
-                helperText={touched.password && errors.password}
-                disabled={isSubmitting}
-                rightIcon={showPassword ? (
-                  <EyeOpenIcon width={20} height={20} />
-                ) : (
-                  <EyeClosedIcon width={20} height={20} />
-                )}
-                onRightIconClick={() => setShowPassword((prev) => !prev)}
-              />
+                <CustomTextField
+                  label="Contraseña"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => handleFieldChange("password", e.target.value)}
+                  onBlur={() => handleFieldBlur("password")}
+                  size="medium"
+                  fullWidth
+                  aria-label="Password"
+                  required
+                  helperText={touched.password && errors.password}
+                  disabled={isSubmitting}
+                  rightIcon={showPassword ? (
+                    <EyeOpenIcon width={20} height={20} />
+                  ) : (
+                    <EyeClosedIcon width={20} height={20} />
+                  )}
+                  onRightIconClick={() => setShowPassword((prev) => !prev)}
+                />
+              </div>
+              {/* Login Button */}
+              <div className="flex justify-center">
+                <CustomButton
+                  type="submit"
+                  variant="contained"
+                  fullWidth={false}
+                  sx={{
+                    backgroundColor: "var(--color-primary-500)",
+                    "&:hover": {
+                      backgroundColor: "var(--color-primary-600)",
+                    },
+                    position: "relative",
+                  }}
+                >
+                  <span style={{ visibility: isSubmitting ? "hidden" : "visible" }}>
+                    Iniciar sesión
+                  </span>
+                  {isSubmitting && (
+                    <CircularProgress
+                      size={16}
+                      sx={{
+                        color: "var(--color-white)",
+                        position: "absolute",
+                      }}
+                    />
+                  )}
+                </CustomButton>
+              </div>
             </form>
-
-            {/* Login Button */}
-            <div className="flex justify-center">
-              <CustomButton
-                type="submit"
-                variant="contained"
-                fullWidth={false}
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                loading={isSubmitting}
-                sx={{
-                  backgroundColor: "var(--color-primary-500)",
-                  "&:hover": {
-                    backgroundColor: "var(--color-primary-600)",
-                  },
-                  "&:disabled": {
-                    backgroundColor: "var(--color-primary-300)",
-                  },
-                }}
-              >
-                Iniciar sesión
-              </CustomButton>
-            </div>
           </div>
         </div>
       </div>
