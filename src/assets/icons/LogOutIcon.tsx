@@ -17,6 +17,7 @@ export const LogOutIcon = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       onClick={onClick}
+      className="cursor-pointer"
     >
       <path
         d="M16 17L21 12L16 7"

@@ -30,14 +30,10 @@ const customTheme = createTheme({
           borderRadius: "12px !important",
           fontFamily: "var(--font-family-sans)",
           fontSize: "14px",
-          "& fieldset": {
+          "& fieldset, &:hover fieldset, &.Mui-focused fieldset": {
             borderRadius: "12px !important",
-          },
-          "&:hover fieldset": {
-            borderRadius: "12px !important",
-          },
-          "&.Mui-focused fieldset": {
-            borderRadius: "12px !important",
+            borderColor: "#d1d5db !important",
+            borderWidth: "1px !important",
           },
         },
       },
@@ -49,6 +45,17 @@ const customTheme = createTheme({
           fontSize: "14px",
           "&.Mui-disabled": {
             color: "rgba(0, 0, 0, 0.6) !important",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:hover, &:focus, &:focus-visible": {
+            backgroundColor: "transparent !important",
+            outline: "none !important",
+            boxShadow: "none !important",
           },
         },
       },
@@ -112,6 +119,32 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
                   "& .MuiPickersInputBase-root": {
                     borderRadius: "12px",
                   },
+                  "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#d1d5db !important",
+                    borderWidth: "1px !important",
+                  },
+                  "& .MuiInputAdornment-root .MuiIconButton-root": {
+                    "&:hover, &:focus, &:focus-visible": {
+                      backgroundColor: "transparent !important",
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                  },
+                },
+              },
+              day: {
+                sx: {
+                  "&.Mui-selected, &:hover, &.Mui-focusVisible": {
+                    border: "none !important",
+                    outline: "none !important",
+                    "&::before, &::after": {
+                      border: "none !important",
+                    },
+                  },
+                  "&.Mui-selected": {
+                    backgroundColor: "#0D47A1 !important",
+                    color: "white !important",
+                  },
                 },
               },
             }}
@@ -136,6 +169,32 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
                   },
                   "& .MuiPickersInputBase-root": {
                     borderRadius: "12px",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline, &.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#d1d5db !important",
+                    borderWidth: "1px !important",
+                  },
+                  "& .MuiInputAdornment-root .MuiIconButton-root": {
+                    "&:hover, &:focus, &:focus-visible": {
+                      backgroundColor: "transparent !important",
+                      outline: "none !important",
+                      boxShadow: "none !important",
+                    },
+                  },
+                },
+              },
+              day: {
+                sx: {
+                  "&.Mui-selected, &:hover, &.Mui-focusVisible": {
+                    border: "none !important",
+                    outline: "none !important",
+                    "&::before, &::after": {
+                      border: "none !important",
+                    },
+                  },
+                  "&.Mui-selected": {
+                    backgroundColor: "#0D47A1 !important",
+                    color: "white !important",
                   },
                 },
               },

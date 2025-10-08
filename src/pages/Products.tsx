@@ -161,7 +161,7 @@ export const Products = () => {
                     title: "Agregar Nuevo Producto",
                   });
                 }}
-                sx={{ backgroundColor: "var(--color-primary-500)" }}
+                sx={{ backgroundColor: "var(--color-primary-500)", color: "var(--color-white)" }}
               >
                 Agregar primer producto
               </CustomButton>

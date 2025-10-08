@@ -138,7 +138,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4 max-h-[36vh] overflow-auto pr-2">
+        <div className="flex flex-col gap-4 max-h-[36vh] overflow-auto">
           {isLoading ? (
             <Loader />
           ) : sides.length === 0 ? (
@@ -149,7 +149,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
             </div>
           ) : (
             sides.map((side) => (
-              <div key={side.id} className="p-2">
+              <div key={side.id} className="pt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-row gap-6">
                     <div className="min-w-[30%]">

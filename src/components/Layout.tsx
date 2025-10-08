@@ -99,10 +99,12 @@ export default function Layout({ children }: LayoutProps) {
         </nav>
 
         {/* Admin and Logout at bottom */}
-        <div className="flex gap-3 px-4 py-3 text-sub1 text-primary-500 items-center justify-between">
-          <div className="flex flex-row items-center gap-2">
-            <UserIcon color="var(--color-primary-500)" />
-            <span>{getInitials(currentUser?.name)}</span>
+        <div className="flex p-3 text-primary-500 items-center justify-between">
+          <div className="flex flex-row items-center gap-2 max-w-[80%]">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 flex-shrink-0">
+              <span className="text-white text-body2 leading-none">{getInitials(currentUser?.name)}</span>
+            </div>
+            <span className="text-body1 overflow-hidden text-ellipsis whitespace-nowrap">{currentUser?.name}</span>
           </div>
           <LogOutIcon color="var(--color-gray-700)" onClick={handleLogout} />
         </div>
