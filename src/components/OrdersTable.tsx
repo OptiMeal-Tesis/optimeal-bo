@@ -64,7 +64,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
 
-      toast.success("Estado actualizado correctamente", {
+      toast.success(`Orden #${orderId} actualizada correctamente a ${getStatusInfo(newStatus).label}.`, {
         duration: 3000,
         style: {
           background: "var(--color-white)",

@@ -76,11 +76,7 @@ export const useGetAllOrders = (
         queryClient.invalidateQueries({ queryKey: ["orders"] });
         queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
       })
-      .on("broadcast", { event: "order-status-updated" }, (payload) => {
-        const data: any = payload.payload;
-        const prev = data?.previousStatus ?? "";
-        const next = data?.newStatus ?? "";
-        toast(`Orden #${data?.order?.id ?? ""}: ${prev} → ${next}`);
+      .on("broadcast", { event: "order-status-updated" }, () => {
         queryClient.invalidateQueries({ queryKey: ["orders"] });
         queryClient.invalidateQueries({ queryKey: ["shiftSummary"] });
       })
