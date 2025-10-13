@@ -19,16 +19,6 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-const formatTime = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString("es-AR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "UTC",
-  });
-};
-
 const getStatusInfo = (status: OrderStatus) => {
   const statusMap = {
     PENDING: { label: "Pendiente", className: "text-gray-600" },
@@ -115,6 +105,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
     );
   }
 
+  console.log(orders)
+
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
@@ -157,7 +149,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                   {formatPrice(order.totalPrice)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {formatTime(order.pickUpTime)}
+                  {order.shift?.replace(/\s*-\s*/, ' - ')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   <div className="max-w-xs">

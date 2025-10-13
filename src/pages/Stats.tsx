@@ -146,7 +146,7 @@ export const Stats: React.FC = () => {
       },
       status: order.status as any,
       totalPrice: order.totalPrice,
-      pickUpTime: order.pickUpTime,
+      shift: order.shift,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
       orderItems: order.orderItems.map((item) => ({

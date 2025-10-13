@@ -37,7 +37,7 @@ export interface Order {
   user: User;
   status: OrderStatus;
   totalPrice: number;
-  pickUpTime: string;
+  shift: string;
   createdAt: string;
   updatedAt: string;
   orderItems: OrderItem[];

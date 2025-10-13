@@ -7,7 +7,6 @@ import { FoodIcon } from "../assets/icons/FoodIcon";
 import { StatsIcon } from "../assets/icons/StatsIcon";
 import { LogOutIcon } from "../assets/icons/LogOutIcon";
 import { useGetCurrentUser } from "../hooks/useUser";
-import { UserIcon } from "../assets/icons/UserIcon";
 
 interface LayoutProps {
   children: React.ReactNode;

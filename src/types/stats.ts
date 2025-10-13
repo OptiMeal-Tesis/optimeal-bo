@@ -34,7 +34,7 @@ export interface StatsOrder {
   userId: number;
   status: string;
   totalPrice: number;
-  pickUpTime: string;
+  shift: string;
   createdAt: string;
   updatedAt: string;
   user: {
