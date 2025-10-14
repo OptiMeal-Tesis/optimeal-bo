@@ -238,7 +238,7 @@ export const Stats: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center justify-between sticky top-0 z-10 bg-gray-100 py-2">
+      <div className="flex items-center justify-between sticky top-0 z-10 bg-gray-100 pb-4">
         <div className="flex flex-col gap-2">
           <span className="text-h2-bold text-primary-500">Estadísticas</span>
           <span className="text-body1-bold text-primary-500">

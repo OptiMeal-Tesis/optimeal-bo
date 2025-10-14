@@ -109,10 +109,11 @@ export const Products = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Fixed Page Header */}
-      <div className="flex flex-row justify-between items-center sticky top-0 z-10 bg-gray-100 py-4">
-        <div>
-          <span className="text-h2-bold text-primary-500">
-            Productos - {formattedDate}
+      <div className="flex flex-row justify-between items-center sticky top-0 z-10 bg-gray-100 pb-4">
+        <div className="flex flex-col gap-2">
+          <span className="text-h2-bold text-primary-500">Productos</span>
+          <span className="text-body1-bold text-primary-500">
+            {formattedDate}
           </span>
         </div>
         <div className="flex flex-row">
