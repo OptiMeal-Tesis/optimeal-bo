@@ -1,11 +1,13 @@
-export const EyeOpenIcon = ({
+export const EllipsisVerticalIcon = ({
   width = 24,
   height = 24,
   color = "currentColor",
+  onClick,
 }: {
   width?: number;
   height?: number;
   color?: string;
+  onClick?: () => void;
 }) => {
   return (
     <svg
@@ -18,14 +20,14 @@ export const EyeOpenIcon = ({
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-eye-icon lucide-eye"
+      onClick={onClick}
+      className="cursor-pointer"
     >
-      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-      <circle cx="12" cy="12" r="3" />
+      <circle cx="12" cy="12" r="1"/>
+      <circle cx="12" cy="5" r="1"/>
+      <circle cx="12" cy="19" r="1"/>
     </svg>
   );
 };
-
-export default EyeOpenIcon;
 
 
