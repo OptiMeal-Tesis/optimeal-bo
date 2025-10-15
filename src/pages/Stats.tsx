@@ -19,8 +19,12 @@ const formatPrice = (price: number) => {
 };
 
 const formatDate = (dateString: string) => {
-  const date = dayjs(dateString);
-  return date.format("DD [de] MMM [de] YYYY");
+  const date = dayjs(dateString).toDate();
+  return date.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 export const Stats: React.FC = () => {
