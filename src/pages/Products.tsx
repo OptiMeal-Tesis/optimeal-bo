@@ -178,6 +178,7 @@ export const Products = () => {
                 name={product.name}
                 description={product.description}
                 stock={product.stock}
+                price={product.price}
                 onStockChange={(newStock) =>
                   handleStockChange(newStock, product)
                 }
