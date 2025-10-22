@@ -1,6 +1,6 @@
 export const ProductCardSkeleton = () => {
   return (
-    <div className="bg-white rounded-lg border border-gray-100 overflow-hidden w-full max-w-sm animate-pulse">
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden w-full max-w-sm animate-pulse">
       {/* Image Skeleton */}
       <div className="h-50 w-full bg-gray-200"></div>
 

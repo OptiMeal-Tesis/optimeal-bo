@@ -40,7 +40,7 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 flex justify-between">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 flex justify-between">
       <div className="flex items-center gap-4">
         <CustomTextField
           label="ID de Orden"

@@ -60,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
 
       {/* Modal content */}
       <div
-        className={`relative bg-white rounded-lg shadow-xl w-full ${getSizeClasses()} mx-4 max-h-[90vh] overflow-hidden`}
+        className={`relative bg-white rounded-xl shadow-xl w-full ${getSizeClasses()} mx-4 max-h-[90vh] overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

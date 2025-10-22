@@ -73,7 +73,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
   };
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="p-6">
           <div className="animate-pulse">
             <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
@@ -90,7 +90,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
 
   if (orders.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+      <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
         <p className="text-gray-500 text-body1">
           {pagination
             ? `No se encontraron órdenes en la página ${pagination.page}`
@@ -105,10 +105,8 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
     );
   }
 
-  console.log(orders)
-
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

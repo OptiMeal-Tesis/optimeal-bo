@@ -15,7 +15,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div className="bg-red-50 border border-red-200 rounded-xl p-4">
         <p className="text-red-600 text-sm">
           Error al cargar el resumen del turno
         </p>
@@ -36,7 +36,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
                 className="bg-white rounded-2xl border-2 border-gray-200 shadow-xl p-4 w-1/3 animate-pulse"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-20 h-20 bg-gray-300 rounded-lg"></div>
+                  <div className="w-20 h-20 bg-gray-300 rounded-xl"></div>
                   <div className="flex flex-col justify-between min-h-20 flex-1 min-w-0">
                     <div className="h-4 bg-gray-300 rounded w-32 mb-2"></div>
                     <div className="h-4 bg-gray-300 rounded w-24"></div>
@@ -72,7 +72,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
 
   if (!shiftData) {
     return (
-      <div className="bg-gray-50 p-4 rounded-lg">
+      <div className="bg-gray-50 p-4 rounded-xl">
         <p className="text-sm text-gray-500 italic">
           No hay datos disponibles para este turno
         </p>
@@ -120,7 +120,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
 
       {/* Empty state */}
       {shiftData.mainDishes.length === 0 && shiftData.sides.length === 0 && (
-        <div className="bg-gray-50 p-4 rounded-lg">
+        <div className="bg-gray-50 p-4 rounded-xl">
           <p className="text-sm text-gray-500 italic">
             No hay platos para preparar en este turno
           </p>

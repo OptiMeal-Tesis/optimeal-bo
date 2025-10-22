@@ -54,7 +54,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
     return null;
   };
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 h-full flex flex-col donut-chart">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 h-full flex flex-col donut-chart">
       <span className="text-h3-bold mb-4">{title}</span>
 
       <div className="flex items-center gap-6 flex-1">

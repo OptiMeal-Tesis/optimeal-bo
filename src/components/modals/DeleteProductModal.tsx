@@ -55,7 +55,7 @@ export const DeleteProductModal = ({
           <img
             src={photo || ImagePlaceholder}
             alt={productName}
-            className="w-100 h-56 object-cover rounded-lg mx-auto"
+            className="w-100 h-56 object-cover rounded-xl mx-auto"
           />
 
           {/* Product Name */}

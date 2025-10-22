@@ -94,7 +94,7 @@ export default function Sidebar() {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sub1`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sub1`}
                   style={{
                     color: "var(--color-primary-500)",
                     backgroundColor: isActive

@@ -33,7 +33,7 @@ export const ProductItemCard = ({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-100 overflow-hidden w-full max-w-sm">
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden w-full max-w-sm">
 
       <div
         className="relative w-full overflow-hidden bg-gray-100"

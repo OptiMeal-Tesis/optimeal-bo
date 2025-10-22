@@ -256,7 +256,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
   }
 
   return (
-    <div className="w-full">
+    <form onSubmit={handleSubmit} className="w-full">
       <div className="w-full flex flex-col gap-4">
         <div className="flex flex-row gap-6 py-2">
           {/* Image Upload Section - Left */}
@@ -400,6 +400,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           {isEditing && (
             <CustomButton
               variant="contained"
+              type="button"
               onClick={handleDeleteClick}
               disabled={isSubmitting || isLoadingProduct}
               sx={{
@@ -417,6 +418,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           <div className="flex gap-4">
             <CustomButton
               variant="outlined"
+              type="button"
               onClick={closeModal}
               disabled={isSubmitting}
               sx={{
@@ -432,8 +434,8 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
             </CustomButton>
             <CustomButton
               variant="contained"
-              onClick={handleSubmit}
-              disabled={isSubmitting || (isEditing && isLoadingProduct)}
+              type="submit"
+              disabled={isSubmitting || (isEditing && isLoadingProduct) || formData.name.trim() === "" || formData.description.trim() === "" || formData.price.trim() === ""}
               loading={isSubmitting || (isEditing && isLoadingProduct)}
               sx={{
                 backgroundColor: "var(--color-primary-500)",
@@ -447,6 +449,6 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };

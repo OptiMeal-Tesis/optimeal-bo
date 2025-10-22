@@ -25,14 +25,14 @@ export default function MealCard({
         <div className="flex-shrink-0 relative w-20 h-20">
           {/* Skeleton */}
           {!loaded && (
-            <div className="absolute inset-0 rounded-lg bg-gray-200 animate-pulse" />
+            <div className="absolute inset-0 rounded-xl bg-gray-200 animate-pulse" />
           )}
           
           <img
             src={image || ImagePlaceholder }
             alt={name}
             onLoad={() => setLoaded(true)}
-            className={`w-20 h-20 rounded-lg object-cover transition-opacity duration-300 ${
+            className={`w-20 h-20 rounded-xl object-cover transition-opacity duration-300 ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
           />

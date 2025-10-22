@@ -13,7 +13,7 @@ export const StatsSummaryCard: React.FC<StatsSummaryCardProps> = ({
   icon,
 }) => {
   return (
-    <div className="rounded-lg p-6 bg-primary-500">
+    <div className="rounded-xl p-6 bg-primary-500">
       <div className="flex items-center justify-between text-white">
         <div>
           <p className="text-sm font-medium opacity-90">{title}</p>

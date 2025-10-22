@@ -220,7 +220,7 @@ export const Stats: React.FC = () => {
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
           <p className="text-red-800">Error al cargar las estadísticas</p>
         </div>
       </div>
@@ -230,7 +230,7 @@ export const Stats: React.FC = () => {
   if (!statsData?.data) {
     return (
       <div className="p-6">
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
           <p className="text-gray-800">No hay datos disponibles</p>
         </div>
       </div>

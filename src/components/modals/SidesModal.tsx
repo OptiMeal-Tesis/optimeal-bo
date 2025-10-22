@@ -203,7 +203,14 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 pt-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!newSide.trim() || submitting) return;
+            void handleAdd();
+          }}
+          className="flex items-center gap-2 pt-2"
+        >
           <div className="flex-1">
             <CustomTextField
               label="Nueva guarnición"
@@ -213,7 +220,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
             />
           </div>
           <CustomButton
-            onClick={handleAdd}
+            type="submit"
             disabled={submitting || !newSide.trim()}
             sx={{
               height: 56,
@@ -236,11 +243,12 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
           >
             Agregar
           </CustomButton>
-        </div>
+        </form>
 
         <div className="flex justify-center gap-4 pt-2">
           <CustomButton
             variant="outlined"
+            type="button"
             onClick={closeModal}
             sx={{
               borderColor: "var(--color-gray-300)",
@@ -255,6 +263,7 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
           </CustomButton>
           <CustomButton
             variant="contained"
+            type="button"
             onClick={handleSave}
             disabled={submitting || Object.keys(editedSides).length === 0}
             sx={{
