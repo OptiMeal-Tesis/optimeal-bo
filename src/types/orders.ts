@@ -61,6 +61,7 @@ export interface OrderFilters {
   orderId?: string;
   nationalId?: string;
   userName?: string;
+  search?: string;
   status?: OrderStatus;
   startDate?: string;
   endDate?: string;

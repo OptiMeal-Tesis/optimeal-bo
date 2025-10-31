@@ -29,14 +29,8 @@ export const useGetAllOrders = (
     f: async () => {
       const params = new URLSearchParams();
 
-      if (filters?.orderId) {
-        params.append("orderId", filters.orderId);
-      }
-      if (filters?.nationalId) {
-        params.append("nationalId", filters.nationalId);
-      }
-      if (filters?.userName) {
-        params.append("userName", filters.userName);
+      if (filters?.search) {
+        params.append("search", filters.search);
       }
       if (filters?.status) {
         params.append("status", filters.status);

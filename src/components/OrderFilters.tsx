@@ -28,7 +28,7 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onFiltersChangeRef.current(localFilters);
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
   }, [localFilters]);
@@ -40,45 +40,18 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 flex justify-between">
-      <div className="flex items-center gap-4">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 flex justify-between flex-row gap-4">
+      <div className="flex items-center gap-4 flex-grow">
         <CustomTextField
-          label="ID de Orden"
-          placeholder="Ej: 123"
-          value={localFilters.orderId || ""}
+          label="Buscar por ID, DNI, Cliente"
+          placeholder="Ej: 123, 12345678, Juan Pérez"
+          value={localFilters.search || ""}
           onChange={(e) =>
-            setLocalFilters((prev) => ({ ...prev, orderId: e.target.value }))
+            setLocalFilters((prev) => ({ ...prev, search: e.target.value }))
           }
           disabled={isLoading}
           size="small"
-          sx={{ minWidth: "150px" }}
-        />
-
-        <CustomTextField
-          label="DNI del Cliente"
-          placeholder="Ej: 12345678"
-          value={localFilters.nationalId || ""}
-          onChange={(e) =>
-            setLocalFilters((prev) => ({
-              ...prev,
-              nationalId: e.target.value,
-            }))
-          }
-          disabled={isLoading}
-          size="small"
-          sx={{ minWidth: "150px" }}
-        />
-
-        <CustomTextField
-          label="Nombre del Cliente"
-          placeholder="Ej: Juan Pérez"
-          value={localFilters.userName || ""}
-          onChange={(e) =>
-            setLocalFilters((prev) => ({ ...prev, userName: e.target.value }))
-          }
-          disabled={isLoading}
-          size="small"
-          sx={{ minWidth: "150px" }}
+          sx={{ minWidth: "100px", flex: 1 }}
         />
       </div>
 
