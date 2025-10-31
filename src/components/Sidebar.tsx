@@ -34,16 +34,10 @@ const navigationItems: NavItem[] = [
   },
 ];
 
-const getInitials = (name?: string) => {
+const getInitials = (name?: string, lastName?: string) => {
   if (!name) return "";
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "";
-  if (parts.length === 1) {
-    const word = parts[0];
-    const firstTwo = (word[0] || "") + (word[1] || "");
-    return firstTwo.toUpperCase();
-  }
-  return (parts[0][0] + parts[1][0]).toUpperCase();
+  if (!lastName) return "";
+  return (name[0] + lastName[0]).toUpperCase();
 };
 
 export default function Sidebar() {
@@ -114,7 +108,7 @@ export default function Sidebar() {
       <div className="flex p-3 text-primary-500 items-center justify-between relative mb-1" ref={menuRef}>
         <div className="flex flex-row items-center gap-2 max-w-[80%] min-w-0 flex-1">
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-500 flex-shrink-0">
-            <span className="text-white text-body2 leading-none">{getInitials(currentUser?.name)}</span>
+            <span className="text-white text-body2 leading-none">{getInitials(currentUser?.name, currentUser?.lastName)}</span>
           </div>
           <div className="flex flex-col gap-1 relative min-w-0 flex-1">
             <span 
@@ -123,11 +117,11 @@ export default function Sidebar() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={() => setShowTooltip(false)}
             >
-              {currentUser?.name}
+              {currentUser?.name} {currentUser?.lastName}
             </span>
             {showTooltip && currentUser?.name && (
               <div className="absolute left-0 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-body2 rounded-md shadow-lg whitespace-nowrap z-50 pointer-events-none">
-                {currentUser.name}
+                {currentUser?.name} {currentUser?.lastName}
                 <div className="absolute left-4 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
               </div>
             )}
