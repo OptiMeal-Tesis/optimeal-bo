@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import CustomButton from "../CustomButton";
 import CustomTextField from "../CustomTextField";
 import { CustomRadioGroup } from "../CustomRadioGroup";
@@ -26,7 +26,12 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   const updateSide = useUpdateSide();
   const { closeModal } = useModalStore();
   const queryClient = useQueryClient();
-  
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const shouldScrollToBottomRef = useRef(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
+
   const sides: Side[] = useMemo(() => data?.data ?? [], [data]);
 
   const [newSide, setNewSide] = useState("");
@@ -34,6 +39,63 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
   const [editedSides, setEditedSides] = useState<
     Record<number, { name: string; isActive: boolean }>
   >({});
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const el = scrollContainerRef.current;
+      if (!el) return;
+      setHasOverflow(el.scrollHeight > el.clientHeight);
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      const atTop = el.scrollTop <= 1;
+      setIsAtBottom(atBottom);
+      setIsAtTop(atTop);
+    };
+
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+
+    return () => {
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Re-check when sides data changes or loading state flips
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    // Use rAF to ensure layout is settled
+    requestAnimationFrame(() => {
+      setHasOverflow(el.scrollHeight > el.clientHeight);
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      const atTop = el.scrollTop <= 1;
+      setIsAtBottom(atBottom);
+      setIsAtTop(atTop);
+      
+      // Scroll to bottom if we just added a side
+      if (shouldScrollToBottomRef.current) {
+        el.scrollTo({
+          top: el.scrollHeight,
+          behavior: 'smooth'
+        });
+        shouldScrollToBottomRef.current = false;
+      }
+    });
+  }, [sides.length, isLoading]);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      const atTop = el.scrollTop <= 1;
+      setIsAtBottom(atBottom);
+      setIsAtTop(atTop);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+    };
+  }, [scrollContainerRef.current]);
 
   const handleAdd = async () => {
     const name = newSide.trim();
@@ -49,8 +111,8 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
         },
       });
       setNewSide("");
+      shouldScrollToBottomRef.current = true;
       queryClient.invalidateQueries({ queryKey: ['sides'] });
-
     } finally {
       setSubmitting(false);
     }
@@ -137,8 +199,54 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4 max-h-[36vh] overflow-auto">
+      <div className="flex flex-col gap-6 pt-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!newSide.trim() || submitting) return;
+            void handleAdd();
+          }}
+          className="flex items-center gap-2 "
+        >
+          <div className="flex-1">
+            <CustomTextField
+              label="Nueva guarnición"
+              value={newSide}
+              onChange={(e) => setNewSide(e.target.value)}
+              fullWidth
+            />
+          </div>
+          <CustomButton
+            type="submit"
+            disabled={submitting || !newSide.trim()}
+            sx={{
+              height: 56,
+              borderColor: `${
+                !newSide.trim()
+                  ? "var(--color-gray-200)"
+                  : "var(--color-primary-500)"
+              }`,
+              borderWidth: "1.5px",
+              borderStyle: "solid",
+              color: `${
+                !newSide.trim()
+                  ? "var(--color-primary-500)"
+                  : "var(--color-primary-500)"
+              }`,
+              "&:hover": {
+                borderColor: "var(--color-primary-500)",
+              },
+            }}
+          >
+            Agregar
+          </CustomButton>
+        </form>
+
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            className="flex flex-col gap-4 max-h-90 overflow-auto"
+          >
           {isLoading ? (
             <Loader />
           ) : sides.length === 0 ? (
@@ -201,51 +309,16 @@ export const SidesModal: React.FC<SidesModalProps> = () => {
               </div>
             ))
           )}
+          </div>
+          {hasOverflow && !isAtTop && (
+            <div className="pointer-events-none absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white to-transparent z-10" />
+          )}
+          {hasOverflow && !isAtBottom && (
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent z-10" />
+          )}
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!newSide.trim() || submitting) return;
-            void handleAdd();
-          }}
-          className="flex items-center gap-2 pt-2"
-        >
-          <div className="flex-1">
-            <CustomTextField
-              label="Nueva guarnición"
-              value={newSide}
-              onChange={(e) => setNewSide(e.target.value)}
-              fullWidth
-            />
-          </div>
-          <CustomButton
-            type="submit"
-            disabled={submitting || !newSide.trim()}
-            sx={{
-              height: 56,
-              borderColor: `${
-                !newSide.trim()
-                  ? "var(--color-gray-200)"
-                  : "var(--color-primary-500)"
-              }`,
-              borderWidth: "1.5px",
-              borderStyle: "solid",
-              color: `${
-                !newSide.trim()
-                  ? "var(--color-primary-500)"
-                  : "var(--color-primary-500)"
-              }`,
-              "&:hover": {
-                borderColor: "var(--color-primary-500)",
-              },
-            }}
-          >
-            Agregar
-          </CustomButton>
-        </form>
-
-        <div className="flex justify-center gap-4 pt-2">
+        <div className="flex justify-center gap-4 ">
           <CustomButton
             variant="outlined"
             type="button"

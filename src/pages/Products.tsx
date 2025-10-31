@@ -121,11 +121,10 @@ export const Products = () => {
             sx={{ gap: "8px" }}
             onClick={() => {
               setSelectedModal(ModalEnum.SIDES_MODAL, {
-                title: "Editar Guarniciones",
+                title: "Guarniciones",
               });
             }}
           >
-            <PencilIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Guarniciones</span>
           </CustomButton>
           <CustomButton
