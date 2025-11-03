@@ -124,7 +124,8 @@ export const Products = () => {
                 title: "Guarniciones",
               });
             }}
-          >
+          > 
+            <PencilIcon color="var(--color-primary-500)" />
             <span className="text-body1 text-primary-500">Guarniciones</span>
           </CustomButton>
           <CustomButton
