@@ -70,6 +70,16 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
   const updateProduct = useUpdateProduct();
   const queryClient = useQueryClient();
 
+  const formatThousands = (value: string) => {
+    const digitsOnly = value.replace(/[^0-9]/g, "");
+    if (digitsOnly === "") return "";
+    try {
+      return new Intl.NumberFormat("es-AR").format(Number(digitsOnly));
+    } catch {
+      return digitsOnly;
+    }
+  };
+
   // Get product data when editing
   const {
     data: productData,
@@ -100,7 +110,7 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
       setFormData({
         name: productData.name || "",
         description: productData.description || "",
-        price: productData.price ? productData.price.toString() : "",
+        price: productData.price ? formatThousands(productData.price.toString()) : "",
         restrictions: mapRestrictionsToStrings(productData.restrictions || []),
         sides: sideIds,
         admitsClarifications: productData.admitsClarifications ? "yes" : "no",
@@ -306,13 +316,13 @@ export const ProductModal = ({ productId }: ProductModalProps) => {
                 <CustomTextField
                   label="Precio"
                   value={formData.price}
-                  onChange={(e) => handleInputChange("price", e.target.value)}
+                  onChange={(e) => handleInputChange("price", formatThousands(e.target.value))}
                   error={!!errors.price}
                   helperText={errors.price}
                   fullWidth
                   required
                   placeholder="$ 12000"
-                  type="number"
+                  type="text"
                   prefix="$"
                 />
               </div>
