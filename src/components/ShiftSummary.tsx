@@ -28,7 +28,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
       <div className="space-y-6">
         {/* Main Dishes Skeleton */}
         <div className="flex flex-col gap-2">
-          <span className="text-sub1 text-primary-500">Platos principales</span>
+          <span className="text-sub1 text-primary-500">Productos por entregar   </span>
           <div className="flex flex-row gap-4">
             {[1, 2, 3].map((i) => (
               <div
@@ -85,7 +85,7 @@ export default function ShiftSummary({ selectedShift }: ShiftSummaryProps) {
       {/* Main Dishes */}
       {shiftData.mainDishes.length > 0 && (
         <div className="flex flex-col gap-2">
-          <span className="text-sub1 text-primary-500">Platos principales</span>
+          <span className="text-sub1 text-primary-500">Productos por entregar</span>
           <div className="grid grid-cols-3 gap-4 w-full">
             {shiftData.mainDishes.map((dish) => (
               <MealCard
