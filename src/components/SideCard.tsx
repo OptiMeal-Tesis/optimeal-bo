@@ -10,7 +10,7 @@ export default function SideCard({ delivered, total, name }: SideCardProps) {
       <div className="flex flex-col gap-2 justify-between overflow-hidden">
         {/* Top Line - Delivery Status */}
         <div className="text-body1 text-primary-500 leading-tight">
-          <span>Por entregar: </span>
+          <span>Entregado: </span>
           <span className="font-bold">{delivered}</span>
           <span>/{total}</span>
         </div>
